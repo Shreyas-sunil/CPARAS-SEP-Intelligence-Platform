@@ -471,3 +471,7 @@ Copy the files of `tgpp-sqlite-retrieval\dist\retrieval_data\` into **`dist\retr
 | [`docs/CPARAS_Intelligence_Platform_Paper_v3.pdf`](docs/CPARAS_Intelligence_Platform_Paper_v3.pdf) | Paper: *CPARAS: An Offline, LLM-Assisted Platform for Reading ETSI IPR Declarations and Checking Them Against 3GPP Specifications* |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/AUTH.md`](docs/AUTH.md), [`docs/TESTING.md`](docs/TESTING.md), [`docs/WINDOWS_IMPORT_RUNBOOK.md`](docs/WINDOWS_IMPORT_RUNBOOK.md) | Technical notes |
 | [`DATASET_INTEGRATION.md`](DATASET_INTEGRATION.md), [`RETRIEVAL_INDEX_INTEGRATION.md`](RETRIEVAL_INDEX_INTEGRATION.md), [`CHANGELOG.md`](CHANGELOG.md) | Integration notes and release history |
+
+### Embeddings
+
+[`embeddings/`](embeddings/) holds `embed_cparas.py`, the tool that turns the CPARAS 3GPP dataset into vector embeddings. Setup and usage: [`embeddings/README.md`](embeddings/README.md). Full documentation: [`embeddings/DOCUMENTATION.html`](embeddings/DOCUMENTATION.html). Paper: [*Benchmarking Sentence Embedding Models for Patent-Standard Semantic Alignment*](embeddings/docs/Benchmarking_Embedding_Models_Patent_Standard.pdf).

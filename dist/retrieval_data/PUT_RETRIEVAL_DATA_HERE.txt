@@ -1,0 +1,30 @@
+PUT THE 3GPP RETRIEVAL INDEX HERE
+=================================
+
+Copy the CONTENTS of the tgpp-sqlite-retrieval output folder
+
+    D:\3gpp\tgpp-sqlite-retrieval\dist\retrieval_data\
+
+into THIS folder, so that it looks like this:
+
+    CPARAS_Platform_Revamped\dist\retrieval_data\
+        search_index.sqlite      (the ~20 GB database - required)
+        schema_version.json      (required)
+        manifest.json            (required - also used to check the copy is complete)
+        build_report.json
+        README.txt
+        tgpp_retrieval.py
+        PUT_RETRIEVAL_DATA_HERE.txt   (this file; harmless)
+
+Nothing else to configure: leave CPARAS_RETRIEVAL_DATA empty in backend\.env.
+The backend opens the files READ-ONLY and never modifies them.
+
+PowerShell (from the project folder; close the app first if it is running):
+    robocopy D:\3gpp\tgpp-sqlite-retrieval\dist\retrieval_data .\dist\retrieval_data /E
+
+Then (re)start the app and open the "3GPP Retrieval Index" page - it shows which files were found,
+whether the copy is complete (database size is compared with manifest.json) and what the index contains.
+
+Copying the folder up one level (files directly in dist\) also works.
+To avoid keeping two 20 GB copies, one app can use this folder and the other can point at it with
+its own setting (CPARAS_RETRIEVAL_DATA / IC_RETRIEVAL_DATA in that app's backend\.env).

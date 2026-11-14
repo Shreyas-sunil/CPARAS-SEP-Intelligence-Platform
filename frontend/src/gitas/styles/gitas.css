@@ -1,0 +1,165 @@
+/* ============================================================================
+   CPARAS Bulk — page-level styles
+   Built on the shared platform design tokens (platform/styles/platform.css).
+   Class names keep their historical g-* prefix (internal only).
+   ========================================================================= */
+
+/* ── Generic building blocks still used by several Bulk pages ─────────── */
+.app-root .g-page { padding: 20px 24px 48px; max-width: 1640px; margin: 0 auto; }
+.app-root .g-page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.app-root .g-page-title { font-size: 20px; font-weight: 600; letter-spacing: -.2px; }
+.app-root .g-page-sub { font-size: 12.5px; color: var(--c-muted); display: block; margin-top: 2px; }
+
+.app-root .g-card {
+  background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--c-radius-lg);
+  box-shadow: var(--c-shadow-sm); padding: 14px 16px; min-width: 0;
+}
+.app-root .g-card-title { font-size: 13.5px; font-weight: 600; margin-bottom: 12px; color: var(--c-text); }
+.app-root .g-kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
+@media (max-width: 1100px) { .app-root .g-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.app-root .g-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 900px) { .app-root .g-grid2 { grid-template-columns: minmax(0, 1fr); } }
+
+.app-root .g-btn-primary, .app-root .g-btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 30px; padding: 0 12px; border-radius: var(--c-radius-sm); font-size: 12.5px; font-weight: 500;
+  border: 1px solid var(--c-border-strong); background: var(--c-surface); color: var(--c-text); white-space: nowrap;
+  transition: background .12s, border-color .12s;
+}
+.app-root .g-btn-primary { background: var(--c-accent); border-color: var(--c-accent); color: var(--c-accent-ink); }
+.app-root .g-btn-primary:hover:not(:disabled) { background: var(--c-accent-hover); }
+.app-root .g-btn-ghost:hover:not(:disabled) { background: var(--c-surface-2); }
+.app-root .g-btn-primary:disabled, .app-root .g-btn-ghost:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ── Essentiality badges ─────────────────────────────────────────────── */
+.app-root .g-badge {
+  display: inline-flex; align-items: center; gap: 5px; height: 21px; padding: 0 8px; border-radius: 999px;
+  font-size: 11.2px; font-weight: 500; white-space: nowrap; background: var(--c-surface-3); color: var(--c-text-2);
+}
+.app-root .g-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.app-root .g-badge.essential { background: var(--c-ok-soft); color: var(--c-ok); }
+.app-root .g-badge.potential { background: var(--c-warn-soft); color: var(--c-warn); }
+.app-root .g-badge.nonessential { background: var(--c-err-soft); color: var(--c-err); }
+.app-root .g-badge.plain::before { display: none; }
+
+/* ── Tables (charts.tsx portfolio table, corpus pages) ─────────────────── */
+.app-root .g-table-wrap { overflow-x: auto; }
+.app-root .g-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12.5px; }
+.app-root .g-table th {
+  position: sticky; top: 0; background: var(--c-surface-2); text-align: left; font-size: 10.8px; font-weight: 600;
+  letter-spacing: .5px; text-transform: uppercase; color: var(--c-muted); padding: 8px 12px;
+  border-bottom: 1px solid var(--c-border); white-space: nowrap;
+}
+.app-root .g-table td { padding: 8px 12px; border-bottom: 1px solid var(--c-border); vertical-align: middle; }
+.app-root .g-table tbody tr:last-child td { border-bottom: none; }
+.app-root .g-table tbody tr:hover td { background: color-mix(in srgb, var(--c-accent) 4%, var(--c-surface)); }
+.app-root .g-link { color: var(--c-accent); font-weight: 500; }
+.app-root .g-link:hover { text-decoration: underline; }
+.app-root .g-mini-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; width: 90px; background: var(--c-surface-3); }
+
+/* ── Heatmap ─────────────────────────────────────────────────────────── */
+.app-root .g-heatmap-scroll { overflow-x: auto; }
+.app-root .g-pdf-capture .g-heatmap-scroll { overflow: visible; }
+.app-root .g-heatmap { border-collapse: separate; border-spacing: 3px; font-size: 11.5px; }
+.app-root .g-heatmap th { font-weight: 600; color: var(--c-muted); padding: 4px 6px; text-align: center; white-space: nowrap; font-size: 11px; }
+.app-root .g-heatmap th.domain-head { text-align: left; }
+.app-root .g-heatmap td.domain-label { text-align: left; font-weight: 500; color: var(--c-text-2); padding: 4px 10px 4px 0; white-space: nowrap; }
+.app-root .g-heat-cell { width: 68px; height: 32px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #fff; font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.app-root .g-heat-cell.empty { background: var(--c-surface-3); color: var(--g-heat-empty-text); font-weight: 400; }
+.app-root .g-heat-legend { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--c-muted); }
+.app-root .g-heat-legend-swatch { width: 12px; height: 12px; border-radius: 3px; }
+
+/* ── Score bars / mapping (patent detail) ─────────────────────────────── */
+.app-root .g-score-row { margin-bottom: 11px; }
+.app-root .g-score-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; color: var(--c-text-2); }
+.app-root .g-score-label b { font-weight: 600; color: var(--c-text); font-variant-numeric: tabular-nums; }
+.app-root .g-score-track { height: 6px; background: var(--c-surface-3); border-radius: 3px; overflow: hidden; }
+.app-root .g-score-fill { height: 100%; border-radius: 3px; }
+.app-root .g-mapping-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 900px) { .app-root .g-mapping-grid { grid-template-columns: minmax(0, 1fr); } }
+.app-root .g-mapping-box { border-radius: var(--c-radius); padding: 12px 14px; font-size: 12.8px; line-height: 1.65; }
+.app-root .g-mapping-box.claim { background: var(--g-claim-bg); border: 1px solid var(--g-claim-border); }
+.app-root .g-mapping-box.standard { background: var(--g-standard-bg); border: 1px solid var(--g-standard-border); }
+.app-root .g-mapping-box-title { font-size: 10.8px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 6px; }
+.app-root .g-mapping-box.claim .g-mapping-box-title { color: var(--g-claim-text); }
+.app-root .g-mapping-box.standard .g-mapping-box-title { color: var(--g-standard-text); }
+.app-root .g-term-hl { background: var(--g-highlight-amber); padding: 0 3px; border-radius: 3px; font-weight: 500; color: var(--c-text); }
+.app-root .g-mapping-box.standard .g-term-hl { background: var(--g-highlight-blue); }
+
+.app-root .g-related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.app-root .g-related-card { display: block; border: 1px solid var(--c-border); border-radius: var(--c-radius); padding: 11px 12px; transition: border-color .15s, box-shadow .15s; background: var(--c-surface); }
+.app-root .g-related-card:hover { border-color: var(--c-border-strong); box-shadow: var(--c-shadow); }
+.app-root .g-related-id { color: var(--c-accent); font-weight: 500; font-size: 12px; font-family: var(--c-mono); }
+.app-root .g-related-title { font-size: 12.3px; margin: 5px 0; color: var(--c-text-2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.app-root .g-related-meta { font-size: 11px; color: var(--c-muted); margin-bottom: 7px; }
+
+/* ── Filter panel (dashboard) ────────────────────────────────────────── */
+.bulk-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 14px; align-items: start; }
+.bulk-layout.filters-hidden { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 1000px) { .bulk-layout { grid-template-columns: minmax(0, 1fr); } }
+.filter-panel { position: sticky; top: calc(var(--c-topbar-h) + 14px); max-height: calc(100vh - var(--c-topbar-h) - 28px); display: flex; flex-direction: column; }
+@media (max-width: 1000px) { .filter-panel { position: static; max-height: none; } }
+.filter-panel .card-body { overflow-y: auto; padding: 4px 14px 10px; }
+.filter-group { border-bottom: 1px solid var(--c-border); padding: 10px 0; }
+.filter-group:last-child { border-bottom: none; }
+.filter-group summary {
+  list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+  font-size: 11px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: var(--c-text-2);
+}
+.filter-group summary::-webkit-details-marker { display: none; }
+.filter-group summary .count { font-size: 10.5px; color: var(--c-accent); background: var(--c-accent-soft); border-radius: 999px; padding: 0 6px; letter-spacing: 0; }
+.filter-options { margin-top: 8px; display: flex; flex-direction: column; gap: 5px; max-height: 176px; overflow-y: auto; }
+.filter-options .input { height: 28px; font-size: 12px; margin-bottom: 4px; }
+.filter-options .check { font-size: 12.3px; }
+.filter-options .check span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.filter-panel .card-footer { gap: 8px; }
+.active-filters { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+/* ── Upload / run progress ───────────────────────────────────────────── */
+.run-progress { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 14px; align-items: center; }
+.run-progress-meta { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; color: var(--c-muted); grid-column: 1 / -1; }
+.run-progress-meta b { color: var(--c-text); font-weight: 600; }
+
+/* ── Company avatar ──────────────────────────────────────────────────── */
+.g-profile-avatar { width: 44px; height: 44px; border-radius: 10px; background: var(--c-bulk-soft); color: var(--c-bulk); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; border: 1px solid color-mix(in srgb, var(--c-bulk) 30%, transparent); }
+
+/* ── Static / help pages ─────────────────────────────────────────────── */
+.prose { font-size: 13.3px; line-height: 1.7; color: var(--c-text-2); }
+.prose h2 { font-size: 14.5px; font-weight: 600; color: var(--c-text); margin: 0 0 6px; }
+.prose p + p { margin-top: 8px; }
+.prose ul { padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.faq-item { border-bottom: 1px solid var(--c-border); }
+.faq-item:last-child { border-bottom: none; }
+.faq-item summary { cursor: pointer; font-weight: 500; font-size: 13.3px; padding: 12px 16px; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: '+'; color: var(--c-muted); font-weight: 400; }
+.faq-item[open] summary::after { content: '–'; }
+.faq-item p { padding: 0 16px 14px; font-size: 12.8px; color: var(--c-text-2); line-height: 1.7; }
+.link-card { display: flex; flex-direction: column; gap: 5px; padding: 13px 14px; border: 1px solid var(--c-border); border-radius: var(--c-radius); background: var(--c-surface); height: 100%; transition: border-color .15s, box-shadow .15s; }
+.link-card:hover { border-color: var(--c-border-strong); box-shadow: var(--c-shadow); }
+.link-card-title { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; color: var(--c-text); }
+.link-card-title svg { color: var(--p-color, var(--c-accent)); }
+.link-card-body { font-size: 12.3px; color: var(--c-muted); line-height: 1.55; }
+
+/* ── Legacy helpers still used by Standards Corpus page ──────────────── */
+.app-root .g-empty { text-align: center; padding: 44px 20px; color: var(--c-muted); }
+.app-root .g-empty h3 { color: var(--c-text); margin: 10px 0 6px; font-size: 14px; font-weight: 600; }
+.app-root .g-loading { display: flex; align-items: center; gap: 10px; color: var(--c-muted); font-size: 12.5px; padding: 36px; justify-content: center; }
+.app-root .g-spin { width: 15px; height: 15px; border: 2px solid var(--c-border-strong); border-top-color: var(--c-accent); border-radius: 50%; animation: c-spin .7s linear infinite; }
+.app-root .g-spin-icon { animation: c-spin .8s linear infinite; }
+@keyframes g-indeterminate { 0% { left: -35%; } 100% { left: 100%; } }
+.app-root .g-indeterminate-bar { animation: g-indeterminate 1.1s ease-in-out infinite; }
+.app-root .g-pill { border: 1px solid var(--c-border-strong); border-radius: 5px; padding: 2px 8px; font-family: var(--c-mono); font-size: 10.5px; }
+.app-root .g-check { display: flex; align-items: center; gap: 8px; font-size: 12.3px; color: var(--c-text-2); cursor: pointer; }
+.app-root .g-check input { accent-color: var(--c-accent); }
+
+@media print {
+  .sidebar, .topbar, .app-footer, .no-print { display: none !important; }
+  .shell { display: block; }
+}
+.app-root .g-mini-bar > span { display: block; height: 100%; }
+.dash-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+/* PDF capture block re-declares the light tokens (see DashboardPage). */
+.app-root.g-pdf-capture { min-height: 0; background: transparent; }
+.filter-options > * { flex-shrink: 0; }
+ul.prose { padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }

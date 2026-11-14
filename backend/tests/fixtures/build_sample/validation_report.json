@@ -1,0 +1,21 @@
+{
+  "out": "/home/claude/work/fixture_build",
+  "generated_at": "2026-10-11T09:37:18.767167+00:00",
+  "stats": {
+    "records": 9,
+    "zip_records": 9,
+    "ledger_rows": 9
+  },
+  "errors": [],
+  "warnings": [
+    {
+      "code": "version_unknown",
+      "detail": "38_series_38.331_unversioned.zip_draft.docx"
+    }
+  ],
+  "error_counts": {},
+  "warning_counts": {
+    "version_unknown": 1
+  },
+  "ok": true
+}

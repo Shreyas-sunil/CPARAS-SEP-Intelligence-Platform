@@ -1,0 +1,75 @@
+# CPARAS — C-DOT SEP Intelligence Platform — GPU variant (in-container llama.cpp + CUDA)
+# Use this only if you want inference running INSIDE the backend container.
+# For a GPU Ollama install on the HOST (the simpler, recommended path), use
+# the plain docker-compose.yml — a host Ollama install already uses your
+# GPU without any of the extra CUDA-in-Docker setup below.
+#
+# Requires: nvidia-container-toolkit installed on the host.
+#   sudo apt install nvidia-container-toolkit
+#   sudo systemctl restart docker
+#
+# Usage:
+#   docker compose -f docker-compose.gpu.yml up --build
+#   Open http://localhost:3000
+
+services:
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.gpu
+    container_name: cparas_platform_backend_gpu
+    ports:
+      # Bound to loopback: the API has no authentication. Override with
+      # BIND_ADDR=0.0.0.0 only on a trusted network.
+      - "${BIND_ADDR:-127.0.0.1}:8000:8000"
+    volumes:
+      - sep_data:/app/data
+      - sep_models:/app/models
+      - ${CPARAS_RETRIEVAL_DATA_HOST:-./retrieval_data}:/app/retrieval_data:ro   # tgpp-sqlite-retrieval output (read-only)
+    environment:
+      HOST: 0.0.0.0
+      CPARAS_RETRIEVAL_DATA: /app/retrieval_data
+      PORT: 8000
+      LLM_BACKEND: llamacpp
+      # Put a GGUF text model (e.g. a Qwen2.5-7B-Instruct Q4_K_M build) into the
+      # models volume and point this at it.
+      LLAMACPP_MODEL_PATH: ${LLAMACPP_MODEL_PATH:-/app/models/model.gguf}
+      LLAMACPP_N_GPU_LAYERS: -1
+      LLAMACPP_N_CTX: 32768
+      VECTOR_BACKEND: chromadb
+      CHROMADB_PATH: /app/data/chromadb
+      EMBEDDING_DEVICE: cuda
+      EMBEDDING_ALLOW_DOWNLOAD: ${EMBEDDING_ALLOW_DOWNLOAD:-true}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 60s   # CUDA + model load can take a while on first boot
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cparas_platform_frontend
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  sep_data:
+    name: sep_data_gpu
+  sep_models:
+    name: sep_models_gpu

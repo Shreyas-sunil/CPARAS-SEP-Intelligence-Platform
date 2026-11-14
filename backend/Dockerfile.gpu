@@ -1,0 +1,51 @@
+# SEP Intelligence Platform — Backend (GPU / in-container llama.cpp variant)
+# Use this only if you want the LLM running INSIDE this container via
+# llama-cpp-python + CUDA. For the (recommended, simpler) setup of running
+# Ollama separately and pointing this container at it, use the plain
+# `Dockerfile` instead — it works fine with a GPU Ollama install on the host.
+
+FROM nvidia/cuda:12.1.1-devel-ubuntu22.04 AS builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.11 python3-pip python3.11-dev \
+    build-essential cmake git curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir --upgrade pip \
+    && pip3 install --no-cache-dir -r requirements.txt \
+    && CMAKE_ARGS="-DLLAMA_CUDA=on" pip3 install --no-cache-dir llama-cpp-python
+
+FROM nvidia/cuda:12.1.1-runtime-ubuntu22.04 AS runtime
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.11 python3-pip tesseract-ocr curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy installed site-packages from the builder stage rather than
+# reinstalling from source (avoids rebuilding llama-cpp-python's CUDA
+# extension, which is by far the slowest step in this image).
+COPY --from=builder /usr/local/lib/python3.11/dist-packages /usr/local/lib/python3.11/dist-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+COPY . .
+RUN mkdir -p data/uploads data/reports data/datasets data/cache data/chromadb models hf_cache \
+    && useradd --create-home --uid 1000 sepapp \
+    && chown -R sepapp:sepapp /app
+
+USER sepapp
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    HOST=0.0.0.0 \
+    PORT=8000
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8000/api/health || exit 1
+
+CMD ["python3", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

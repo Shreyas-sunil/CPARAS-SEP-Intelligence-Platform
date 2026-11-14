@@ -1,0 +1,97 @@
+{
+  "builder_version": "2.0",
+  "generated_at": "2026-10-11T09:37:18.663281+00:00",
+  "arguments": {
+    "cmd": "build",
+    "structured": "fixture_src/structured",
+    "text": "fixture_src/text",
+    "out": "fixture_build",
+    "dry_run": false,
+    "overwrite": true,
+    "versions": "all",
+    "latest_only": false,
+    "max_versions_per_spec": 0,
+    "series": "",
+    "specs": "",
+    "exclude_unidentified": false,
+    "strict_identity": false,
+    "text_fallback": "skip",
+    "history_mode": "sidecar",
+    "history_inline_kb": 20,
+    "no_zip": false,
+    "zip_split_mb": 0,
+    "no_corpus": false,
+    "no_reference": false,
+    "corpus_clauses_per_spec": 4,
+    "corpus_versions_per_clause": 4,
+    "corpus_excerpt_chars": 450,
+    "corpus_include_tr": false,
+    "no_self_check": false,
+    "quiet": false
+  },
+  "structured_files_scanned": 9,
+  "accounting": {
+    "included": 9,
+    "would_include": 0,
+    "excluded": 0,
+    "balanced": true
+  },
+  "excluded_by_category": {},
+  "excluded_by_reason": {},
+  "meaning_of_categories": {
+    "invalid": "genuinely broken source file (empty / bad JSON / not an extractor record)",
+    "unidentified": "record is valid but the builder could not recover its spec number (only excluded with --exclude-unidentified / --strict-identity)",
+    "duplicate": "byte-identical copy of another file",
+    "text": "valid record but no usable extracted text file",
+    "selection": "left out by --versions / --max-versions-per-spec / --series / --specs",
+    "error": "builder error; needs attention"
+  },
+  "warnings_by_code": {
+    "version_unknown": 1
+  },
+  "identity_sources": {
+    "spec": {
+      "record.document_number": 9
+    },
+    "version": {
+      "record.version": 8,
+      "none": 1
+    },
+    "release": {
+      "record": 8,
+      "none": 1
+    }
+  },
+  "records_with_unknown_spec": 0,
+  "records_with_unknown_version": 1,
+  "text_pairing": {
+    "exact": 9
+  },
+  "records_written": 9,
+  "domains": {
+    "Architecture": 1,
+    "Security": 1,
+    "PHY / MAC / Radio": 7
+  },
+  "jsonl_bytes": 15670,
+  "zips": [
+    "etsi_dataset.zip"
+  ],
+  "spec_history": {
+    "mode": "sidecar",
+    "inline_limit_kb": 20,
+    "records_with_externalised_values": 1,
+    "externalised_values": 1,
+    "original_bytes_externalised": 68291,
+    "unique_blobs_in_sidecar": 1,
+    "sidecar_bytes": 2589,
+    "lossless": true
+  },
+  "cli_import_text_dir_ok": true,
+  "corpus": {
+    "corpus_families": 5,
+    "corpus_entries": 14,
+    "reference_specs": 5
+  },
+  "corpus_skipped_document_type_unknown": 0
+}

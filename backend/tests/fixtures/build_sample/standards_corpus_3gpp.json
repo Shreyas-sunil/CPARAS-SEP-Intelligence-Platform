@@ -1,0 +1,177 @@
+{
+ "schema": "cparas_standards_corpus/1.0",
+ "generated_at": "2026-10-11T09:37:18.662705+00:00",
+ "families": [
+  {
+   "standard": "TS 23.501",
+   "family": "23.501",
+   "section_type": "Clause",
+   "domain": "Architecture",
+   "title": "System architecture for the 5G System (5GS)",
+   "clauses": [
+    {
+     "clause": "5.6",
+     "title": "Session management",
+     "versions": [
+      {
+       "version": "v15.2.0",
+       "release": "Rel-15",
+       "year": 2018,
+       "text": "The SMF establishes PDU sessions and selects the UPF; network slicing is identified by S-NSSAI and the AMF performs registration management for the UE. (v15.2.0)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "standard": "TS 33.501",
+   "family": "33.501",
+   "section_type": "Clause",
+   "domain": "Security",
+   "title": "Security architecture and procedures for 5G system",
+   "clauses": [
+    {
+     "clause": "6.1",
+     "title": "Primary authentication",
+     "versions": [
+      {
+       "version": "v15.3.0",
+       "release": "Rel-15",
+       "year": 2018,
+       "text": "The 5G-AKA and EAP-AKA' primary authentication procedures derive the key hierarchy and conceal the subscriber permanent identifier using SUCI. (v15.3.0)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "standard": "TS 36.321",
+   "family": "36.321",
+   "section_type": "Clause",
+   "domain": "PHY / MAC / Radio",
+   "title": "E-UTRA; Medium Access Control (MAC) protocol specification",
+   "clauses": [
+    {
+     "clause": "5.4",
+     "title": "HARQ operation",
+     "versions": [
+      {
+       "version": "v14.0.0",
+       "release": "Rel-14",
+       "year": 2017,
+       "text": "The MAC entity shall handle HARQ processes for uplink and downlink transmissions including soft buffer management and retransmission scheduling in E-UTRA. (v14.0.0)"
+      },
+      {
+       "version": "v15.8.0",
+       "release": "Rel-15",
+       "year": 2018,
+       "text": "The MAC entity shall handle HARQ processes for uplink and downlink transmissions including soft buffer management and retransmission scheduling in E-UTRA. (v15.8.0)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "standard": "TS 38.211",
+   "family": "38.211",
+   "section_type": "Clause",
+   "domain": "PHY / MAC / Radio",
+   "title": "NR; Physical channels and modulation",
+   "clauses": [
+    {
+     "clause": "7.3.1",
+     "title": "Physical downlink shared channel",
+     "versions": [
+      {
+       "version": "v15.2.0",
+       "release": "Rel-15",
+       "year": 2018,
+       "text": "The physical downlink shared channel carries scrambled bits modulated with QPSK 16QAM 64QAM or 256QAM and mapped to physical resources with DM-RS. (v15.2.0)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "standard": "TS 38.331",
+   "family": "38.331",
+   "section_type": "Clause",
+   "domain": "PHY / MAC / Radio",
+   "title": "NR; Radio Resource Control (RRC); Protocol specification",
+   "clauses": [
+    {
+     "clause": "5.3.3",
+     "title": "RRC connection establishment",
+     "versions": [
+      {
+       "version": "v15.3.0",
+       "release": "Rel-15",
+       "year": 2018,
+       "text": "The UE shall initiate the RRC connection establishment procedure when upper layers request establishment of an RRC connection while the UE is in RRC_IDLE and has acquired system information. (v15.3.0)"
+      },
+      {
+       "version": "v16.5.0",
+       "release": "Rel-16",
+       "year": 2020,
+       "text": "The UE shall initiate the RRC connection establishment procedure when upper layers request establishment of an RRC connection while the UE is in RRC_IDLE and has acquired system information. (v16.5.0)"
+      },
+      {
+       "version": "v17.4.0",
+       "release": "Rel-17",
+       "year": 2022,
+       "text": "The UE shall initiate the RRC connection establishment procedure when upper layers request establishment of an RRC connection while the UE is in RRC_IDLE and has acquired system information. (v17.4.0)"
+      }
+     ]
+    },
+    {
+     "clause": "5.3.5",
+     "title": "RRC reconfiguration",
+     "versions": [
+      {
+       "version": "v15.3.0",
+       "release": "Rel-15",
+       "year": 2018,
+       "text": "The UE shall perform the RRC reconfiguration procedure including conditional handover execution and measurement configuration when the network sends an RRCReconfiguration message. (v15.3.0)"
+      },
+      {
+       "version": "v16.5.0",
+       "release": "Rel-16",
+       "year": 2020,
+       "text": "The UE shall perform the RRC reconfiguration procedure including conditional handover execution and measurement configuration when the network sends an RRCReconfiguration message. (v16.5.0)"
+      },
+      {
+       "version": "v17.4.0",
+       "release": "Rel-17",
+       "year": 2022,
+       "text": "The UE shall perform the RRC reconfiguration procedure including conditional handover execution and measurement configuration when the network sends an RRCReconfiguration message. (v17.4.0)"
+      }
+     ]
+    },
+    {
+     "clause": "5.5.4",
+     "title": "Measurement reporting events",
+     "versions": [
+      {
+       "version": "v15.3.0",
+       "release": "Rel-15",
+       "year": 2018,
+       "text": "The UE shall evaluate event A3 and event A5 entering and leaving conditions for each configured measurement identity and trigger a measurement report. (v15.3.0)"
+      },
+      {
+       "version": "v16.5.0",
+       "release": "Rel-16",
+       "year": 2020,
+       "text": "The UE shall evaluate event A3 and event A5 entering and leaving conditions for each configured measurement identity and trigger a measurement report. (v16.5.0)"
+      },
+      {
+       "version": "v17.4.0",
+       "release": "Rel-17",
+       "year": 2022,
+       "text": "The UE shall evaluate event A3 and event A5 entering and leaving conditions for each configured measurement identity and trigger a measurement report. (v17.4.0)"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

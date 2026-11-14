@@ -1,0 +1,90 @@
+# SEP Intelligence Platform — Backend Dependencies
+# Install: pip install -r requirements.txt
+
+# ── Core Framework ─────────────────────────────────────────────────────────────
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.8.2
+pydantic-settings==2.4.0
+python-multipart==0.0.12     # for file uploads
+
+# ── Database ───────────────────────────────────────────────────────────────────
+sqlalchemy==2.0.35
+aiosqlite==0.20.0            # async SQLite driver
+
+# ── HTTP Client ────────────────────────────────────────────────────────────────
+httpx==0.27.2
+
+# ── PDF Parsing ────────────────────────────────────────────────────────────────
+pymupdf==1.24.10              # PyMuPDF — fast PDF text extraction (primary)
+pdfplumber==0.11.4            # table-aware PDF extraction (fallback)
+
+# ── Excel Parsing ──────────────────────────────────────────────────────────────
+openpyxl==3.1.5               # .xlsx / .xlsm (Office Open XML) workbooks
+xlrd==2.0.1                   # .xls (legacy binary) workbooks — xlrd 2.x dropped
+                              # .xlsx support, which is why both libs are needed
+
+# ── Word Document Parsing (ingestion/spec_corpus.py) ────────────────────────────
+# 3GPP ships each spec version as a .zip containing one Word document.
+# python-docx reads modern .docx (Office Open XML) only — legacy binary
+# .doc files are detected and skipped by spec_corpus.py, not parsed here.
+python-docx==1.1.2
+
+# ── Embeddings ─────────────────────────────────────────────────────────────────
+sentence-transformers==3.1.1  # local embedding generation
+psutil>=5.9,<8                # free-RAM / process-memory guard for the importer (optional: skipped if missing)
+torch>=2.1.0,<3.0             # PyTorch (CPU or GPU) — upper bound so a future
+                              # major release can't silently enter a build
+# For GPU: pip install torch --index-url https://download.pytorch.org/whl/cu121
+
+# ── Vector Databases (install ONE or more) ────────────────────────────────────
+qdrant-client==1.11.3         # Qdrant (recommended — best performance)
+chromadb==0.5.15              # ChromaDB (easiest — no server needed)
+posthog>=2.4,<6               # chromadb 0.5.x calls the pre-6.0 posthog API; newer releases make it log errors on every start (telemetry itself is disabled in rag/vector_store.py)
+faiss-cpu==1.8.0              # FAISS (fastest search, pure local)
+# faiss-gpu==1.7.4            # FAISS GPU variant (uncomment if GPU available)
+
+# ── Optional: llama.cpp Python bindings ───────────────────────────────────────
+# Uncomment and install with GPU support:
+# CMAKE_ARGS="-DLLAMA_CUDA=on" pip install llama-cpp-python
+# llama-cpp-python==0.3.1
+
+# ── Optional: OCR for scanned PDFs ────────────────────────────────────────────
+pytesseract==0.3.13         # requires: apt install tesseract-ocr (or: brew install tesseract / choco install tesseract)
+Pillow==10.4.0
+
+# ── Crawling & Data Ingestion ─────────────────────────────────────────────────
+# Also used by utils/html_parser.py for HTML declaration uploads (not just
+# the research/build_corpus.py crawler) — no version bump needed, same libs.
+beautifulsoup4==4.12.3
+lxml==5.3.0
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+python-dotenv==1.0.1
+# Upper bound is load-bearing, not cosmetic. NumPy 2.0 changed the C ABI, and
+# the pinned binary wheels in this file (faiss-cpu 1.8.0, chromadb 0.5.15,
+# scikit-learn 1.5.2, sentence-transformers 3.1.1) are built against NumPy
+# 1.x. Resolving numpy 2.x produces the "compiled using NumPy 1.x cannot be
+# run in NumPy 2.x" ImportError at startup — i.e. a Docker image that builds
+# successfully and then crashes on first request. Raise this deliberately,
+# after re-pinning the wheels above.
+numpy>=1.26.0,<2.0
+
+# ── Research / Paper-Style Analytics (research/ package) ──────────────────────
+# Standard recommendation, SEP classification, version tracking, metrics,
+# and the publication-style figures (similarity scatter, clustering map,
+# topic heatmap, similarity matrix, network graph, timelines, version
+# evolution, distributions). All fully offline/local — no network calls.
+scikit-learn==1.5.2            # cosine similarity, PCA, classification metrics
+matplotlib==3.9.2              # figure rendering (Agg backend, no display needed)
+networkx==3.3                  # patent-standard network graph
+
+# ── Testing ─────────────────────────────────────────────────────────────────
+# Regression tests under backend/tests/ (utils/text_repair, utils/chunking,
+# utils/json_utils verification, research/embeddings + engine calibration).
+# Every test file also runs standalone via `python3 backend/tests/_run_all.py`
+# with nothing beyond the stdlib, for environments where installing pytest
+# isn't possible — but pytest is the intended runner:
+#   python -m pytest backend/tests/ -q
+pytest==8.3.3
+

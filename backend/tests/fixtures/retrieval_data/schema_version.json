@@ -1,0 +1,26 @@
+{
+  "index_format": "tgpp-sqlite-fts5",
+  "schema_version": "1.1.0",
+  "schema_major": 1,
+  "database_file": "search_index.sqlite",
+  "fts_tokenizer": "porter unicode61 remove_diacritics 2",
+  "compatibility": "A reader supporting schema major 1 can read any 1.x.y index; minor/patch bumps only add tables/columns.",
+  "tables": [
+    "build_meta",
+    "sources",
+    "specifications",
+    "documents",
+    "clauses",
+    "records",
+    "records_fts",
+    "spec_references",
+    "change_entries",
+    "version_entries",
+    "version_deltas",
+    "issue_counts",
+    "issue_examples"
+  ],
+  "views": [
+    "v_records"
+  ]
+}

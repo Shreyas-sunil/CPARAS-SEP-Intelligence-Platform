@@ -1,0 +1,36 @@
+# Optional overlay: run with Qdrant instead of the default embedded ChromaDB.
+# Qdrant is supported by rag/vector_store.py but was NOT the configuration
+# exercised in this project's own testing (see backend/.env.example) — use
+# this if you specifically want a standalone vector DB (e.g. for sharing one
+# Qdrant instance across multiple backend instances), not by default.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.qdrant.yml up --build
+
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.11.0
+    container_name: sep_qdrant
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:6333:6333"
+      - "${BIND_ADDR:-127.0.0.1}:6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:6333/healthz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    environment:
+      VECTOR_BACKEND: qdrant
+      QDRANT_URL: http://qdrant:6333
+    depends_on:
+      qdrant:
+        condition: service_healthy
+
+volumes:
+  qdrant_data:
+    name: sep_qdrant_data

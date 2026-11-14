@@ -1,0 +1,101 @@
+# CPARAS — C-DOT SEP Intelligence Platform — CPU / host-Ollama stack
+# Backend (FastAPI) + Frontend (React, served by nginx). Ollama is expected
+# to run on the HOST machine so it can access your GPU directly — running
+# Ollama itself inside Docker on Linux/Windows with GPU passthrough is
+# possible but adds real setup complexity for little benefit versus a
+# native Ollama install, so it isn't done by default here.
+#
+# Usage:
+#   cp backend/.env.example backend/.env   # first run only, then edit it
+#   docker compose up --build
+#   Open http://localhost:3000
+#
+# Prerequisites on the HOST:
+#   - Ollama installed and running (the Ollama app, or `ollama serve`;
+#     if that says the port is in use, Ollama is already running)
+#   - At least one model pulled (`ollama pull qwen2.5:7b`)
+#
+# Vector backend: ChromaDB, embedded directly in the backend container via
+# a persistent volume — no separate server process needed. (Qdrant is also
+# supported by the code for larger deployments; see docker-compose.qdrant.yml
+# and set VECTOR_BACKEND=qdrant / QDRANT_URL if you want it instead.)
+
+services:
+
+  # ── FastAPI Backend ─────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cparas_platform_backend
+    ports:
+      # Bound to loopback: the API has no authentication (it is a local,
+      # single-user tool), so it must not be published on the LAN. Override
+      # with BIND_ADDR=0.0.0.0 only on a trusted network.
+      - "${BIND_ADDR:-127.0.0.1}:8000:8000"
+    volumes:
+      - sep_data:/app/data          # SQLite DB, uploads, reports, ChromaDB
+      - sep_models:/app/models      # local GGUF models, if using llama.cpp
+      - sep_hf_cache:/app/hf_cache  # downloaded embedding model (persists across rebuilds)
+      - ${CPARAS_RETRIEVAL_DATA_HOST:-./dist/retrieval_data}:/app/retrieval_data:ro   # tgpp-sqlite-retrieval output (read-only)
+    environment:
+      HOST: 0.0.0.0
+      CPARAS_RETRIEVAL_DATA: /app/retrieval_data
+      PORT: 8000
+      LLM_BACKEND: ${LLM_BACKEND:-ollama}
+      # host.docker.internal resolves to the Docker host on macOS/Windows
+      # natively; the extra_hosts entry below makes it work on Linux too.
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:7b}
+      OLLAMA_TIMEOUT: ${OLLAMA_TIMEOUT:-1800}
+      OLLAMA_NUM_CTX: ${OLLAMA_NUM_CTX:-24576}
+      OLLAMA_CONCURRENCY: ${OLLAMA_CONCURRENCY:-1}
+      VECTOR_BACKEND: chromadb
+      CHROMADB_PATH: /app/data/chromadb
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-BAAI/bge-m3}
+      EMBEDDING_DEVICE: ${EMBEDDING_DEVICE:-cpu}
+      # Containers start with an empty model cache: allow the one-time
+      # embedding-model download; it is kept in the hf_cache volume below.
+      EMBEDDING_ALLOW_DOWNLOAD: ${EMBEDDING_ALLOW_DOWNLOAD:-true}
+      HF_HOME: /app/hf_cache
+      DATABASE_URL: sqlite+aiosqlite:///./data/sep_intel.db
+      TESSERACT_CMD: ""             # baked into the image's PATH already
+      VISION_MODEL: ${VISION_MODEL:-moondream}
+      EPO_OPS_KEY: ${EPO_OPS_KEY:-}
+      EPO_OPS_SECRET: ${EPO_OPS_SECRET:-}
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # Linux host resolution
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ── React Frontend (served via nginx, proxies /api to backend) ─────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cparas_platform_frontend
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  sep_data:
+    name: sep_data
+  sep_models:
+    name: sep_models
+  sep_hf_cache:
+    name: sep_hf_cache

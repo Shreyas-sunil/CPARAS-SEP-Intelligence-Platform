@@ -1,0 +1,74 @@
+{
+  "format": "tgpp-sqlite-fts5-manifest",
+  "manifest_version": "1.0",
+  "builder_version": "1.1.0",
+  "index_schema_version": "1.1.0",
+  "build_timestamp": "2026-10-11T18:01:21Z",
+  "build_mode": "full",
+  "first_full_build_timestamp": "2026-10-11T18:01:21Z",
+  "database_file": "search_index.sqlite",
+  "database_size_bytes": 229376,
+  "database_sha256": "bf31bc4d58c7933ae3b4ad40cb46251cd184424ec553c8f576e981f0e7522644",
+  "source_files_discovered": {
+    "structured": 10,
+    "text": 7,
+    "total": 17
+  },
+  "source_files_by_status": {
+    "indexed": 16,
+    "skipped": 1
+  },
+  "records_parsed": 17,
+  "records_indexed": 16,
+  "search_rows_indexed": 75,
+  "specifications_indexed": 11,
+  "distinct_spec_ids": 5,
+  "clauses_indexed": 14,
+  "documents_indexed": 8,
+  "text_files_linked_to_documents": 4,
+  "text_files_unlinked": 3,
+  "records_skipped": 1,
+  "records_incomplete": 5,
+  "skipped_or_incomplete_records": 6,
+  "files_with_errors": 0,
+  "source_fingerprint": {
+    "algorithm": "sha256 over sorted lines 'kind<TAB>relative_path<TAB>size<TAB>content_sha256'",
+    "value": "eae8c39aead2292def1fbd5dba884eb65bf1bab50b875b7a24dadfb18f9e2bed",
+    "quick_algorithm": "sha256 over sorted lines 'kind<TAB>relative_path<TAB>size<TAB>mtime_ns'",
+    "quick_value": "5d758ef21d96c561c75d82d9d70c43aa7986934d8eb4ba033a3f60c1ea11158f"
+  },
+  "content_types_included": {
+    "full_text": 15,
+    "clause_summary": 11,
+    "spec_summary": 11,
+    "classification": 9,
+    "metadata": 9,
+    "technical_summary_item": 8,
+    "patent_relevance": 3,
+    "change_history": 2,
+    "normative_requirement": 2,
+    "reference": 2,
+    "terminology": 2,
+    "clause_heading": 1
+  },
+  "full_specification_text_available": true,
+  "full_text_specification_count": 7,
+  "source_text_in_structured_json": false,
+  "text_corpus_configured": true,
+  "provenance_paths": "relative labels only (structured/..., text/...); no absolute paths",
+  "fts": {
+    "table": "records_fts",
+    "tokenizer": "porter unicode61 remove_diacritics 2",
+    "columns": [
+      "text",
+      "label",
+      "clause_title",
+      "spec_title"
+    ]
+  },
+  "built_with": {
+    "python": "3.13.16",
+    "sqlite": "3.45.1"
+  },
+  "bundled_client": null
+}

@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+backend/.venv/
+.venv/
+venv/
+
+# Local configuration and secrets (backend/.env.example is the template)
+backend/.env
+.env
+*.env.local
+
+# Runtime data: SQLite databases, vector store, uploads, knowledge packages, caches
+backend/data/
+backend/models/
+backend/hf_cache/
+logs/
+*.db
+*.sqlite3
+*.log
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+
+# tgpp-sqlite-retrieval index copied in by hand (20+ GB) - keep only the placeholder README
+dist/retrieval_data/*
+!dist/retrieval_data/PUT_RETRIEVAL_DATA_HERE.txt

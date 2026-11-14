@@ -1,0 +1,105 @@
+{
+ "schema": "cparas_spec_reference/1.0",
+ "generated_at": "2026-10-11T09:37:18.662869+00:00",
+ "specs": {
+  "23.501": {
+   "title": "System architecture for the 5G System (5GS)",
+   "domain": "Architecture",
+   "secondary_domains": [],
+   "generation": [
+    "Multiple generations"
+   ],
+   "primary_function": "Defines System architecture for the 5G System (5GS).",
+   "related": [],
+   "document_type": "TS",
+   "latest_version": "15.2.0",
+   "latest_release": "15"
+  },
+  "33.501": {
+   "title": "Security architecture and procedures for 5G system",
+   "domain": "Security",
+   "secondary_domains": [],
+   "generation": [
+    "Multiple generations"
+   ],
+   "primary_function": "Defines Security architecture and procedures for 5G system.",
+   "related": [],
+   "document_type": "TS",
+   "latest_version": "15.3.0",
+   "latest_release": "15"
+  },
+  "36.321": {
+   "title": "E-UTRA; Medium Access Control (MAC) protocol specification",
+   "domain": "PHY / MAC / Radio",
+   "secondary_domains": [],
+   "generation": [
+    "4G / LTE"
+   ],
+   "primary_function": "Defines E-UTRA; Medium Access Control (MAC) protocol specification.",
+   "related": [],
+   "document_type": "TS",
+   "latest_version": "15.8.0",
+   "latest_release": "15"
+  },
+  "38.211": {
+   "title": "NR; Physical channels and modulation",
+   "domain": "PHY / MAC / Radio",
+   "secondary_domains": [],
+   "generation": [
+    "5G / 5G NR"
+   ],
+   "primary_function": "Defines NR; Physical channels and modulation.",
+   "related": [],
+   "document_type": "TS",
+   "latest_version": "15.2.0",
+   "latest_release": "15"
+  },
+  "38.331": {
+   "title": "NR; Radio Resource Control (RRC); Protocol specification",
+   "domain": "PHY / MAC / Radio",
+   "secondary_domains": [],
+   "generation": [
+    "5G / 5G NR"
+   ],
+   "primary_function": "Defines NR; Radio Resource Control (RRC); Protocol specification.",
+   "related": [],
+   "document_type": "TS",
+   "latest_version": "17.4.0",
+   "latest_release": "17"
+  }
+ },
+ "series": {
+  "23": {
+   "name": "Technical realization / network architecture",
+   "domain": "Architecture",
+   "generation": [
+    "Multiple generations"
+   ],
+   "generation_confidence": "low"
+  },
+  "33": {
+   "name": "Security aspects",
+   "domain": "Security",
+   "generation": [
+    "Multiple generations"
+   ],
+   "generation_confidence": "low"
+  },
+  "36": {
+   "name": "Radio aspects - E-UTRA (LTE)",
+   "domain": "PHY / MAC / Radio",
+   "generation": [
+    "4G / LTE"
+   ],
+   "generation_confidence": "medium"
+  },
+  "38": {
+   "name": "Radio aspects - NR (5G)",
+   "domain": "PHY / MAC / Radio",
+   "generation": [
+    "5G / 5G NR"
+   ],
+   "generation_confidence": "medium"
+  }
+ }
+}

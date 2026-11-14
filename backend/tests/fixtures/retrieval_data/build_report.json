@@ -1,0 +1,332 @@
+{
+  "report_version": "1.1",
+  "builder_version": "1.1.0",
+  "build_timestamp": "2026-10-11T18:01:21Z",
+  "build_mode": "full",
+  "summary": {
+    "source_files_discovered": 17,
+    "structured_files": 10,
+    "text_files": 7,
+    "files_indexed": 16,
+    "files_partial": 0,
+    "files_skipped": 1,
+    "files_error": 0,
+    "records_parsed": 17,
+    "records_indexed": 16,
+    "records_skipped": 1,
+    "records_incomplete": 5,
+    "search_rows": 75,
+    "specification_versions": 11,
+    "clauses": 14
+  },
+  "changes_this_run": {
+    "new": 17,
+    "changed": 0,
+    "removed": 0,
+    "unchanged": 0,
+    "text_files_relinked": 0
+  },
+  "run_warnings": [],
+  "content_types": {
+    "full_text": 15,
+    "clause_summary": 11,
+    "spec_summary": 11,
+    "classification": 9,
+    "metadata": 9,
+    "technical_summary_item": 8,
+    "patent_relevance": 3,
+    "change_history": 2,
+    "normative_requirement": 2,
+    "reference": 2,
+    "terminology": 2,
+    "clause_heading": 1
+  },
+  "documents": {
+    "documents_indexed": 8,
+    "documents_identity": {
+      "spec_id_known": 6,
+      "spec_id_unknown": 2,
+      "version_known": 6,
+      "release_known": 6,
+      "spec_id_origin": {
+        "identity.document_number": 5,
+        "unknown": 2,
+        "identity.etsi_number (ETSI number 1NN.MMM -> NN.MMM)": 1
+      },
+      "version_origin": {
+        "identity.version": 5,
+        "None": 2,
+        "identity.version_code 'i10' decoded": 1
+      },
+      "release_origin": {
+        "identity.release": 5,
+        "None": 2,
+        "spec_history.versions_in_archive (entry with the same version)": 1
+      }
+    },
+    "documents_declaring_a_text_file": 5,
+    "text_linking": {
+      "text_files": 7,
+      "by_state": {
+        "ambiguous": 1,
+        "linked": 4,
+        "unlinked": 2
+      },
+      "linked_by_method": {
+        "document_id": 1,
+        "raw_text_path": 3
+      },
+      "unlinked_text_spec_id_origin": {
+        "field": 1,
+        "filename": 1,
+        "unknown": 1
+      },
+      "documents_with_full_text": 4,
+      "documents_without_full_text": 4,
+      "documents_sharing_a_text_file_name": 2,
+      "documents_with_several_text_files": 0
+    },
+    "rows_by_field": {
+      "clauses[].summary": 11,
+      "identity": 8,
+      "technical_summary.purpose": 5,
+      "technical_summary.executive_summary": 3,
+      "technical_summary.normative_requirements": 2,
+      "technical_summary.key_features": 2,
+      "technical_summary.important_procedures": 2,
+      "technical_summary.important_parameters": 2,
+      "technical_summary.important_mechanisms": 2,
+      "spec_history.references": 2,
+      "classification.terminology": 2,
+      "classification.technology_domain": 2,
+      "classification.subdomain": 2,
+      "technical_summary.technical_summary": 1,
+      "technical_summary.scope": 1,
+      "spec_history.changes_in_this_version": 1,
+      "spec_history.change_history": 1,
+      "patent_relevance.potentially_essential_features": 1,
+      "patent_relevance.patent_relevant_concepts": 1,
+      "patent_relevance.distinctive_mechanisms": 1,
+      "clauses[].clause_title": 1,
+      "classification.topics": 1,
+      "classification.technical_entities": 1,
+      "classification.protocols": 1,
+      "classification.network_components": 1,
+      "classification.interfaces": 1
+    },
+    "tables": {
+      "spec_references": 2,
+      "change_entries": 2,
+      "version_entries": 5,
+      "version_deltas": 1
+    }
+  },
+  "issue_totals": {
+    "error": {},
+    "skipped": {
+      "duplicate_document_id": 1
+    },
+    "incomplete": {
+      "missing_clause_id": 1,
+      "missing_release": 4,
+      "missing_spec_id": 3,
+      "missing_spec_title": 1,
+      "missing_version": 4
+    },
+    "warning": {
+      "duplicate_clause_number": 1,
+      "release_derived": 1,
+      "spec_id_derived": 1,
+      "spec_id_from_filename": 1,
+      "text_link_ambiguous": 1,
+      "text_not_linked_to_document": 2,
+      "text_unassociated_spec": 1,
+      "version_derived": 1
+    }
+  },
+  "files": {
+    "error": {
+      "total": 0,
+      "listed": 0,
+      "truncated": false,
+      "items": []
+    },
+    "partial": {
+      "total": 0,
+      "listed": 0,
+      "truncated": false,
+      "items": []
+    },
+    "skipped": {
+      "total": 1,
+      "listed": 1,
+      "truncated": false,
+      "items": [
+        {
+          "path": "structured/zz_duplicate_of_23501.json",
+          "kind": "structured",
+          "note": "duplicate_document_id x1",
+          "records_parsed": 1,
+          "records_indexed": 0,
+          "rows_indexed": 0
+        }
+      ]
+    }
+  },
+  "examples": {
+    "incomplete": {
+      "missing_release": [
+        {
+          "path": "structured/00_series_00.01U/00_series_00.01U_0001U-310.zip_004__C1.PDF.json",
+          "locator": "document",
+          "message": "document 00_series_00.01U_0001U-310.zip_004__C1.PDF indexed without release"
+        },
+        {
+          "path": "structured/empty_doc.json",
+          "locator": "document",
+          "message": "document empty_doc_1 indexed without release"
+        },
+        {
+          "path": "text/orphan_nothing.txt",
+          "locator": "file",
+          "message": "document indexed without release"
+        },
+        {
+          "path": "text/shared_29500.txt",
+          "locator": "file",
+          "message": "document indexed without release"
+        }
+      ],
+      "missing_spec_id": [
+        {
+          "path": "structured/00_series_00.01U/00_series_00.01U_0001U-310.zip_004__C1.PDF.json",
+          "locator": "document",
+          "message": "document 00_series_00.01U_0001U-310.zip_004__C1.PDF indexed without spec_id"
+        },
+        {
+          "path": "structured/empty_doc.json",
+          "locator": "document",
+          "message": "document empty_doc_1 indexed without spec_id"
+        },
+        {
+          "path": "text/orphan_nothing.txt",
+          "locator": "file",
+          "message": "document indexed without spec_id"
+        }
+      ],
+      "missing_version": [
+        {
+          "path": "structured/00_series_00.01U/00_series_00.01U_0001U-310.zip_004__C1.PDF.json",
+          "locator": "document",
+          "message": "document 00_series_00.01U_0001U-310.zip_004__C1.PDF indexed without version"
+        },
+        {
+          "path": "structured/empty_doc.json",
+          "locator": "document",
+          "message": "document empty_doc_1 indexed without version"
+        },
+        {
+          "path": "text/orphan_nothing.txt",
+          "locator": "file",
+          "message": "document indexed without version"
+        },
+        {
+          "path": "text/shared_29500.txt",
+          "locator": "file",
+          "message": "document indexed without version"
+        }
+      ],
+      "missing_clause_id": [
+        {
+          "path": "structured/23_series/23_series_23.501_23501-h50.zip_23501-h50.docx.json",
+          "locator": "document",
+          "message": "document 23_series_23.501_23501-h50.zip_23501-h50.docx indexed without clause_id"
+        }
+      ],
+      "missing_spec_title": [
+        {
+          "path": "structured/empty_doc.json",
+          "locator": "document",
+          "message": "document empty_doc_1 indexed without spec_title"
+        }
+      ]
+    },
+    "warning": {
+      "duplicate_clause_number": [
+        {
+          "path": "structured/23_series/23_series_23.501_23501-h50.zip_23501-h50.docx.json",
+          "locator": "document.clauses[3]",
+          "message": "clause 5.2.2.1 appears more than once in this document; every occurrence is indexed"
+        }
+      ],
+      "release_derived": [
+        {
+          "path": "structured/23_series/23_series_23.501_23501-i10.zip_23501-i10.docx.json",
+          "locator": "document",
+          "message": "release 18 taken from spec_history.versions_in_archive (entry with the same version)"
+        }
+      ],
+      "version_derived": [
+        {
+          "path": "structured/23_series/23_series_23.501_23501-i10.zip_23501-i10.docx.json",
+          "locator": "document",
+          "message": "version 18.1.0 decoded from identity.version_code 'i10'"
+        }
+      ],
+      "spec_id_derived": [
+        {
+          "path": "structured/38_series/38_series_38.331_38331-g10.zip_38331-g10.docx.json",
+          "locator": "document",
+          "message": "spec id 38.331 taken from identity.etsi_number (ETSI number 1NN.MMM -> NN.MMM)"
+        }
+      ],
+      "text_not_linked_to_document": [
+        {
+          "path": "text/orphan_nothing.txt",
+          "locator": "file",
+          "message": "no document refers to this file"
+        },
+        {
+          "path": "text/orphan_with_header.txt",
+          "locator": "file",
+          "message": "no document refers to this file"
+        }
+      ],
+      "text_unassociated_spec": [
+        {
+          "path": "text/orphan_nothing.txt",
+          "locator": "file",
+          "message": "no '3GPP TS nn.nnn Vx.y.z' header and no usable spec number in the file name"
+        }
+      ],
+      "spec_id_from_filename": [
+        {
+          "path": "text/shared_29500.txt",
+          "locator": "file",
+          "message": "inferred 29.500 from file name"
+        }
+      ],
+      "text_link_ambiguous": [
+        {
+          "path": "text/shared_29500.txt",
+          "locator": "file",
+          "message": "matches 2 documents by raw_text_path (e.g. 29_series_29.500_29500-a.zip_29500-a.docx, 29_series_29.500_29500-b.zip_29500-b.docx); not linked"
+        }
+      ]
+    },
+    "skipped": {
+      "duplicate_document_id": [
+        {
+          "path": "structured/zz_duplicate_of_23501.json",
+          "locator": "document",
+          "message": "document_id '23_series_23.501_23501-h50.zip_23501-h50.docx' already indexed from another record/file"
+        }
+      ]
+    }
+  },
+  "notes": [
+    "'records' are top-level JSON objects (or text documents); 'search_rows' are rows in the full-text table. Counts cover the whole index state, not only this run.",
+    "Paths are relative provenance labels (structured/... or text/...); no absolute paths are stored.",
+    "Fingerprint: eae8c39aead2292def1fbd5dba884eb65bf1bab50b875b7a24dadfb18f9e2bed"
+  ]
+}

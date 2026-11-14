@@ -1,0 +1,9 @@
+numpy>=1.23                 # required
+
+# Optional, only for the feature that needs it:
+# sentence-transformers>=2.7  # --backend sentence-transformers (offline, local models)
+# faiss-cpu>=1.8              # --faiss
+# chromadb>=0.5               # --chroma
+#
+# The default backend (Ollama) needs no Python package: install Ollama and run
+#   ollama pull nomic-embed-text

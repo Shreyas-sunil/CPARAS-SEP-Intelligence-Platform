@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+# generated vector stores / datasets
+*.npy
+etsi_dataset*
+cparas_dataset/

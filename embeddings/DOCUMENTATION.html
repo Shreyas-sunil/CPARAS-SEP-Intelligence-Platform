@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CPARAS Embeddings Guide</title>
+<style>
+:root {
+  --bg: #fbfaf8; --paper: #ffffff; --ink: #1d232b; --muted: #5b6470; --faint: #8a929c;
+  --line: #d9dde2; --rule: #e8eaed; --code-bg: #f3f4f6;
+  --node: #ffffff; --node-line: #b9c0c8; --arrow: #6b7480;
+  --accent: #1f5f99; --accent-bg: #e8f1fa; --accent-ink: #154571;
+  --warn-bg: #fdf4e3; --warn-line: #d9a441; --ok: #2d7a4f;
+  --store-bg: #eef6f1; --store-line: #5c9c78;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15181c; --paper: #1b1f24; --ink: #e6e8eb; --muted: #a3abb5; --faint: #7d8590;
+    --line: #333a42; --rule: #2a3037; --code-bg: #242a31;
+    --node: #20252b; --node-line: #4a525c; --arrow: #8f98a3;
+    --accent: #6aa8e0; --accent-bg: #1c2e40; --accent-ink: #a9cdef;
+    --warn-bg: #2e2717; --warn-line: #a98232; --ok: #6cc093;
+    --store-bg: #1b2b22; --store-line: #4f8f69;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15181c; --paper: #1b1f24; --ink: #e6e8eb; --muted: #a3abb5; --faint: #7d8590;
+  --line: #333a42; --rule: #2a3037; --code-bg: #242a31;
+  --node: #20252b; --node-line: #4a525c; --arrow: #8f98a3;
+  --accent: #6aa8e0; --accent-bg: #1c2e40; --accent-ink: #a9cdef;
+  --warn-bg: #2e2717; --warn-line: #a98232; --ok: #6cc093;
+  --store-bg: #1b2b22; --store-line: #4f8f69;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 40px 16px 80px; }
+header.top { border-bottom: 1px solid var(--rule); padding-bottom: 24px; margin-bottom: 32px; }
+.kicker { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+h1 { font-size: 32px; line-height: 1.2; margin: 0 0 10px; letter-spacing: -.01em; }
+.lede { font-size: 18px; color: var(--muted); margin: 0; max-width: 760px; }
+.meta { font-size: 13px; color: var(--faint); margin-top: 14px; }
+h2 { font-size: 23px; line-height: 1.3; margin: 56px 0 12px; padding-top: 8px; border-top: 1px solid var(--rule); }
+h2 .n { color: var(--faint); font-weight: 500; margin-right: 8px; }
+h3 { font-size: 17px; margin: 28px 0 8px; }
+p, li { max-width: 820px; }
+a { color: var(--accent); }
+code, pre, kbd { font-family: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", Menlo, monospace; font-size: 13.5px; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+pre { background: var(--code-bg); padding: 14px 16px; border-radius: 8px; overflow-x: auto; line-height: 1.5; border: 1px solid var(--rule); }
+pre code { background: none; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; font-size: 14.5px; }
+.tablewrap { overflow-x: auto; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--rule); }
+th { font-weight: 600; color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .03em; border-bottom: 1px solid var(--line); }
+td code { white-space: nowrap; }
+.toc { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 20px; columns: 2; column-gap: 32px; font-size: 15px; }
+.toc ol { margin: 0; padding-left: 20px; }
+.toc li { break-inside: avoid; margin: 2px 0; }
+@media (max-width: 640px) { .toc { columns: 1; } h1 { font-size: 26px; } }
+figure { margin: 20px 0 28px; background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; break-inside: avoid; }
+figure svg { width: 100%; height: auto; display: block; }
+figcaption { font-size: 13.5px; color: var(--muted); margin-top: 10px; }
+.note { border-left: 3px solid var(--accent); background: var(--accent-bg); padding: 10px 14px; border-radius: 0 6px 6px 0; margin: 16px 0; }
+.warn { border-left: 3px solid var(--warn-line); background: var(--warn-bg); padding: 10px 14px; border-radius: 0 6px 6px 0; margin: 16px 0; }
+.note p, .warn p { margin: 4px 0; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+.card { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 16px; }
+.card h3 { margin-top: 4px; }
+ol.steps > li { margin-bottom: 8px; }
+
+/* diagram styles */
+.d-node { fill: var(--node); stroke: var(--node-line); stroke-width: 1.2; }
+.d-hl { fill: var(--accent-bg); stroke: var(--accent); stroke-width: 1.8; }
+.d-store { fill: var(--store-bg); stroke: var(--store-line); stroke-width: 1.4; }
+.d-warn { fill: var(--warn-bg); stroke: var(--warn-line); stroke-width: 1.2; }
+.d-band { fill: none; stroke: var(--rule); stroke-dasharray: 4 4; }
+.d-t { fill: var(--ink); font: 600 14px system-ui, -apple-system, "Segoe UI", sans-serif; }
+.d-hlt { fill: var(--accent-ink); font: 700 14.5px system-ui, -apple-system, "Segoe UI", sans-serif; }
+.d-s { fill: var(--muted); font: 12px system-ui, -apple-system, "Segoe UI", sans-serif; }
+.d-m { fill: var(--muted); font: 11.5px ui-monospace, Consolas, Menlo, monospace; }
+.d-lbl { fill: var(--faint); font: italic 11.5px system-ui, -apple-system, "Segoe UI", sans-serif; }
+.d-a { fill: none; stroke: var(--arrow); stroke-width: 1.4; }
+.d-ad { fill: none; stroke: var(--arrow); stroke-width: 1.4; stroke-dasharray: 5 4; }
+.d-head { fill: var(--arrow); }
+.d-txt { fill: var(--line); }
+.d-h { fill: var(--accent); }
+.d-chunk { fill: var(--accent-bg); stroke: var(--accent); stroke-width: 1.2; }
+.d-sum { fill: var(--warn-bg); stroke: var(--warn-line); stroke-width: 1.2; }
+.d-guide { stroke: var(--line); stroke-width: 1; stroke-dasharray: 2 3; }
+
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  .wrap { max-width: none; padding: 0; }
+  h2 { break-after: avoid; }
+  figure, pre, table { break-inside: avoid; }
+  pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+  td code { white-space: normal; }
+  a { color: inherit; text-decoration: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <p class="kicker">CPARAS · 3GPP specification pipeline</p>
+  <h1>embed_cparas.py — vector embeddings for the 3GPP dataset</h1>
+  <p class="lede">How the embedding tool turns the dataset built by <code>build_cparas_dataset.py</code> into a resumable,
+  searchable vector store: what it does, how it is built, what every file contains, and how to run and maintain it.</p>
+  <p class="meta">Tool version 1.0 · chunker version 1 · Requires Python 3.10+ and numpy</p>
+</header>
+
+<nav class="toc" aria-label="Contents">
+<ol>
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#context">Where it fits in the pipeline</a></li>
+  <li><a href="#quickstart">Quick start</a></li>
+  <li><a href="#architecture">Architecture</a></li>
+  <li><a href="#run">What happens during a run</a></li>
+  <li><a href="#chunking">Chunking</a></li>
+  <li><a href="#dedup">De-duplication</a></li>
+  <li><a href="#storage">Storage format and crash safety</a></li>
+  <li><a href="#backends">Embedding backends and models</a></li>
+  <li><a href="#errors">Errors, retries and failures</a></li>
+  <li><a href="#operations">Day-to-day operation</a></li>
+  <li><a href="#using">Using the vectors</a></li>
+  <li><a href="#validate">Validation</a></li>
+  <li><a href="#cli">Command reference</a></li>
+  <li><a href="#testing">Testing</a></li>
+  <li><a href="#limits">Limitations and known gaps</a></li>
+  <li><a href="#trouble">Troubleshooting</a></li>
+</ol>
+</nav>
+
+<!-- ───────────────────────────────────────────── 1 -->
+<h2 id="overview"><span class="n">1</span>Overview</h2>
+<p>The extractor and builder produce one record per 3GPP specification version, each paired with the clean full text
+of that version. <code>embed_cparas.py</code> reads those records, cuts every version's text into clause-aware chunks,
+sends the chunks to an embedding model, and stores one vector per chunk together with the chunk's text and metadata.
+The result supports semantic search ("which clause describes UE behaviour on radio link failure?") filtered by
+specification, series, release or chunk kind.</p>
+
+<div class="grid2">
+  <div class="card">
+    <h3>What goes in</h3>
+    <p>The builder's output folder, the extractor's output folder, a single <code>etsi_dataset.zip</code>,
+    the split <code>etsi_dataset_partNN.zip</code> files, or <code>etsi_dataset.jsonl</code> with its <code>text/</code> folder.
+    Read only; the tool refuses an output folder that overlaps the dataset.</p>
+  </div>
+  <div class="card">
+    <h3>What comes out</h3>
+    <p><code>embeddings.npy</code> (float32, one row per chunk, L2-normalised) and <code>chunks.jsonl</code>
+    (line N describes row N), plus a commit log, a settings manifest and run reports. Optional
+    <code>faiss.index</code> and a Chroma collection.</p>
+  </div>
+</div>
+
+<p>Design goals, in order: never corrupt or mix data (one store = one model and one chunking; crash-safe commits);
+never touch the source dataset; spend model time only on text that has not been embedded before; keep every vector
+traceable to an exact spec version, clause and character range.</p>
+
+<p>The package contains:</p>
+<div class="tablewrap"><table>
+<thead><tr><th>File</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>embed_cparas.py</code></td><td>The tool: <code>embed</code>, <code>query</code>, <code>validate</code>, <code>export</code> commands. Single file.</td></tr>
+<tr><td><code>DOCUMENTATION.html</code></td><td>This document.</td></tr>
+<tr><td><code>README.md</code></td><td>Short version: setup, commands, options.</td></tr>
+<tr><td><code>requirements.txt</code></td><td>numpy (required); optional packages listed as comments.</td></tr>
+<tr><td><code>tests/test_embed_cparas.py</code></td><td>32 regression tests, including a fake Ollama server.</td></tr>
+</tbody></table></div>
+
+<!-- ───────────────────────────────────────────── 2 -->
+<h2 id="context"><span class="n">2</span>Where it fits in the pipeline</h2>
+<p>The embedding step is a new branch after the builder. It does not replace the existing import into CPARAS ISLD
+and the Platform; it reads the same <code>etsi_dataset.zip</code> those importers use.</p>
+
+<figure>
+<svg viewBox="0 0 1000 420" role="img" aria-labelledby="f1t">
+<title id="f1t">Pipeline context: from the 3GPP archive through extraction and building to the importers and the embedding tool</title>
+<defs><marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="d-head"/></marker></defs>
+
+<rect x="10" y="40" width="160" height="74" rx="8" class="d-node"/>
+<text x="90" y="70" text-anchor="middle" class="d-t">3GPP archive</text>
+<text x="90" y="90" text-anchor="middle" class="d-s">series zips</text>
+<text x="90" y="105" text-anchor="middle" class="d-s">.doc / .docx / .pdf</text>
+
+<rect x="205" y="40" width="175" height="74" rx="8" class="d-node"/>
+<text x="292" y="70" text-anchor="middle" class="d-t">extract_3gpp.py</text>
+<text x="292" y="90" text-anchor="middle" class="d-s">clauses, identity, text</text>
+<text x="292" y="105" text-anchor="middle" class="d-s">+ Ollama LLM fields</text>
+
+<rect x="415" y="40" width="175" height="74" rx="8" class="d-node"/>
+<text x="502" y="70" text-anchor="middle" class="d-t">cparas_dataset/</text>
+<text x="502" y="90" text-anchor="middle" class="d-m">structured/*.json</text>
+<text x="502" y="105" text-anchor="middle" class="d-m">text/*.txt</text>
+
+<rect x="625" y="40" width="185" height="74" rx="8" class="d-node"/>
+<text x="717" y="70" text-anchor="middle" class="d-t">build_cparas_dataset.py</text>
+<text x="717" y="90" text-anchor="middle" class="d-s">identity, de-dupe,</text>
+<text x="717" y="105" text-anchor="middle" class="d-s">select, pair text</text>
+
+<rect x="845" y="40" width="145" height="74" rx="8" class="d-node"/>
+<text x="917" y="70" text-anchor="middle" class="d-t">build output</text>
+<text x="917" y="90" text-anchor="middle" class="d-m">etsi_dataset.zip</text>
+<text x="917" y="105" text-anchor="middle" class="d-s">corpus, reference</text>
+
+<path d="M170,77 H203" class="d-a" marker-end="url(#ah1)"/>
+<path d="M380,77 H413" class="d-a" marker-end="url(#ah1)"/>
+<path d="M590,77 H623" class="d-a" marker-end="url(#ah1)"/>
+<path d="M810,77 H843" class="d-a" marker-end="url(#ah1)"/>
+
+<!-- to importers -->
+<path d="M960,114 V196" class="d-a" marker-end="url(#ah1)"/>
+<rect x="830" y="198" width="160" height="74" rx="8" class="d-node"/>
+<text x="910" y="228" text-anchor="middle" class="d-t">ISLD / Platform</text>
+<text x="910" y="248" text-anchor="middle" class="d-s">existing knowledge-</text>
+<text x="910" y="263" text-anchor="middle" class="d-s">base import</text>
+
+<!-- to embedder -->
+<path d="M875,114 V152 H395 V196" class="d-a" marker-end="url(#ah1)"/>
+<text x="640" y="145" text-anchor="middle" class="d-lbl">same etsi_dataset.zip, read only</text>
+
+<rect x="20" y="198" width="215" height="74" rx="8" class="d-node"/>
+<text x="127" y="228" text-anchor="middle" class="d-t">Embedding model</text>
+<text x="127" y="248" text-anchor="middle" class="d-s">Ollama · sentence-transformers</text>
+<text x="127" y="263" text-anchor="middle" class="d-s">· OpenAI-compatible server</text>
+
+<rect x="290" y="198" width="210" height="74" rx="8" class="d-hl"/>
+<text x="395" y="228" text-anchor="middle" class="d-hlt">embed_cparas.py</text>
+<text x="395" y="248" text-anchor="middle" class="d-s">chunk · embed · commit</text>
+<text x="395" y="263" text-anchor="middle" class="d-s">this package</text>
+
+<path d="M237,228 H288" class="d-a" marker-start="url(#ah1)" marker-end="url(#ah1)"/>
+<text x="262" y="220" text-anchor="middle" class="d-lbl">vectors</text>
+
+<rect x="555" y="198" width="215" height="74" rx="8" class="d-store"/>
+<text x="662" y="228" text-anchor="middle" class="d-t">Vector store (--out)</text>
+<text x="662" y="248" text-anchor="middle" class="d-m">embeddings.npy</text>
+<text x="662" y="263" text-anchor="middle" class="d-m">chunks.jsonl</text>
+<path d="M500,235 H553" class="d-a" marker-end="url(#ah1)"/>
+
+<!-- consumers -->
+<rect x="380" y="330" width="175" height="62" rx="8" class="d-node"/>
+<text x="467" y="357" text-anchor="middle" class="d-t">query · validate</text>
+<text x="467" y="376" text-anchor="middle" class="d-s">built-in commands</text>
+
+<rect x="575" y="330" width="175" height="62" rx="8" class="d-node"/>
+<text x="662" y="357" text-anchor="middle" class="d-t">faiss.index · Chroma</text>
+<text x="662" y="376" text-anchor="middle" class="d-s">optional exports</text>
+
+<rect x="770" y="330" width="220" height="62" rx="8" class="d-node"/>
+<text x="880" y="357" text-anchor="middle" class="d-t">Your application</text>
+<text x="880" y="376" text-anchor="middle" class="d-s">semantic search, RAG, similarity</text>
+
+<path d="M620,272 L490,328" class="d-a" marker-end="url(#ah1)"/>
+<path d="M662,272 V328" class="d-a" marker-end="url(#ah1)"/>
+<path d="M705,272 L850,328" class="d-a" marker-end="url(#ah1)"/>
+</svg>
+<figcaption>Figure 1. The embedding tool is a read-only consumer of the builder's output, beside the existing importers.</figcaption>
+</figure>
+
+<!-- ───────────────────────────────────────────── 3 -->
+<h2 id="quickstart"><span class="n">3</span>Quick start</h2>
+<pre><code>pip install -r requirements.txt            # numpy
+ollama pull nomic-embed-text               # default embedding model
+
+# 1. dry run: chunk everything and report counts (no model needed, writes only dryrun_report.json)
+python embed_cparas.py embed --dataset D:\3gpp\build_v2 --out D:\3gpp\vectors --dry-run
+
+# 2. trial on a few documents, to see speed and output
+python embed_cparas.py embed --dataset D:\3gpp\build_v2 --out D:\3gpp\vectors_test --series 55 --limit 5
+
+# 3. full run (resumable: run the same command again after Ctrl+C or a crash)
+python embed_cparas.py embed --dataset D:\3gpp\build_v2 --out D:\3gpp\vectors
+
+# 4. search, and check the store
+python embed_cparas.py query --out D:\3gpp\vectors "UE behaviour on radio link failure" -k 5 --release 16
+python embed_cparas.py validate --out D:\3gpp\vectors --dataset D:\3gpp\build_v2</code></pre>
+<p>The first word after the script name is the command; if it is omitted, <code>embed</code> is assumed.</p>
+
+<!-- ───────────────────────────────────────────── 4 -->
+<h2 id="architecture"><span class="n">4</span>Architecture</h2>
+<p>The tool is a single-process streaming pipeline. Documents are read one at a time; their chunks flow through a
+de-duplication router into batches for the model; finished documents are committed to the store strictly in dataset
+order. Memory use is bounded by the batch size and the handful of documents waiting for their last vectors, not by
+the size of the dataset.</p>
+
+<figure>
+<svg viewBox="0 0 1000 545" role="img" aria-labelledby="f2t">
+<title id="f2t">Internal architecture of embed_cparas.py</title>
+<defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="d-head"/></marker></defs>
+
+<text x="20" y="22" class="d-lbl">READ AND CHUNK</text>
+<rect x="20" y="34" width="150" height="100" rx="8" class="d-node"/>
+<text x="95" y="62" text-anchor="middle" class="d-t">Dataset</text>
+<text x="95" y="82" text-anchor="middle" class="d-s">zip / part zips /</text>
+<text x="95" y="97" text-anchor="middle" class="d-s">jsonl + text/</text>
+<text x="95" y="117" text-anchor="middle" class="d-lbl">read only</text>
+
+<rect x="205" y="34" width="185" height="100" rx="8" class="d-node"/>
+<text x="297" y="62" text-anchor="middle" class="d-t">Source</text>
+<text x="297" y="82" text-anchor="middle" class="d-s">detects the layout,</text>
+<text x="297" y="97" text-anchor="middle" class="d-s">pairs record with text,</text>
+<text x="297" y="112" text-anchor="middle" class="d-s">fingerprints each version</text>
+
+<rect x="425" y="34" width="190" height="100" rx="8" class="d-node"/>
+<text x="520" y="62" text-anchor="middle" class="d-t">Chunker</text>
+<text x="520" y="82" text-anchor="middle" class="d-s">find clause headings,</text>
+<text x="520" y="97" text-anchor="middle" class="d-s">glue tiny sections, split</text>
+<text x="520" y="112" text-anchor="middle" class="d-s">with overlap, + summary</text>
+
+<rect x="650" y="34" width="165" height="100" rx="8" class="d-node"/>
+<text x="732" y="62" text-anchor="middle" class="d-t">Embed input</text>
+<text x="732" y="82" text-anchor="middle" class="d-s">model prefix +</text>
+<text x="732" y="97" text-anchor="middle" class="d-s">spec/clause line + text</text>
+<text x="732" y="117" text-anchor="middle" class="d-m">key = SHA-256</text>
+
+<path d="M170,84 H203" class="d-a" marker-end="url(#ah2)"/>
+<path d="M390,84 H423" class="d-a" marker-end="url(#ah2)"/>
+<path d="M615,84 H648" class="d-a" marker-end="url(#ah2)"/>
+<path d="M732,134 V188" class="d-a" marker-end="url(#ah2)"/>
+
+<text x="20" y="178" class="d-lbl">ROUTE, EMBED, COMMIT</text>
+<rect x="650" y="190" width="165" height="126" rx="8" class="d-hl"/>
+<text x="732" y="214" text-anchor="middle" class="d-hlt">Dedup router</text>
+<text x="662" y="236" class="d-s">1  resolved, not committed</text>
+<text x="662" y="254" class="d-s">2  committed row in .npy</text>
+<text x="662" y="272" class="d-s">3  already in flight</text>
+<text x="662" y="290" class="d-s">4  new: add to batch</text>
+<text x="732" y="308" text-anchor="middle" class="d-lbl">1–3 cost no model call</text>
+
+<rect x="835" y="190" width="155" height="126" rx="8" class="d-node"/>
+<text x="912" y="214" text-anchor="middle" class="d-t">Batcher</text>
+<text x="912" y="236" text-anchor="middle" class="d-s">--batch-size inputs</text>
+<text x="912" y="254" text-anchor="middle" class="d-s">retry transient errors</text>
+<text x="912" y="272" text-anchor="middle" class="d-s">split rejected batches</text>
+<text x="912" y="290" text-anchor="middle" class="d-s">normalise, check dims</text>
+<path d="M815,253 H833" class="d-a" marker-end="url(#ah2)"/>
+
+<rect x="835" y="388" width="155" height="122" rx="8" class="d-node"/>
+<text x="912" y="412" text-anchor="middle" class="d-t">Backend</text>
+<text x="912" y="434" text-anchor="middle" class="d-s">Ollama /api/embed</text>
+<text x="912" y="452" text-anchor="middle" class="d-s">sentence-transformers</text>
+<text x="912" y="470" text-anchor="middle" class="d-s">OpenAI-compatible</text>
+<text x="912" y="488" text-anchor="middle" class="d-s">hash (tests only)</text>
+<path d="M912,318 V386" class="d-a" marker-start="url(#ah2)" marker-end="url(#ah2)"/>
+
+<rect x="425" y="190" width="190" height="126" rx="8" class="d-node"/>
+<text x="520" y="214" text-anchor="middle" class="d-t">Ordered commit queue</text>
+<text x="520" y="236" text-anchor="middle" class="d-s">a version commits when</text>
+<text x="520" y="254" text-anchor="middle" class="d-s">all its vectors are in,</text>
+<text x="520" y="272" text-anchor="middle" class="d-s">in dataset order</text>
+<text x="520" y="292" text-anchor="middle" class="d-s">failed ones → failed.jsonl</text>
+<path d="M650,253 H617" class="d-ad" marker-end="url(#ah2)"/>
+<path d="M880,316 V346 H520 V318" class="d-a" marker-end="url(#ah2)"/>
+<text x="700" y="340" text-anchor="middle" class="d-lbl">vectors for every waiting chunk</text>
+
+<rect x="125" y="190" width="265" height="190" rx="8" class="d-store"/>
+<text x="257" y="214" text-anchor="middle" class="d-t">Vector store (--out)</text>
+<text x="141" y="242" class="d-m">embeddings.npy</text><text x="290" y="242" class="d-s">vectors</text>
+<text x="141" y="264" class="d-m">chunks.jsonl</text><text x="290" y="264" class="d-s">text + meta</text>
+<text x="141" y="286" class="d-m">docs.jsonl</text><text x="290" y="286" class="d-s">commit log</text>
+<text x="141" y="308" class="d-m">manifest.json</text><text x="290" y="308" class="d-s">settings</text>
+<text x="141" y="330" class="d-m">failed.jsonl</text><text x="290" y="330" class="d-s">retry list</text>
+<text x="141" y="352" class="d-m">embed_report.json</text><text x="290" y="352" class="d-s">run stats</text>
+<path d="M425,253 H392" class="d-a" marker-end="url(#ah2)"/>
+<path d="M200,190 V150 H297 V136" class="d-ad" marker-end="url(#ah2)"/>
+<text x="208" y="176" class="d-lbl">resume: skip done</text>
+
+<text x="20" y="420" class="d-lbl">READ THE STORE</text>
+<rect x="20" y="460" width="170" height="70" rx="8" class="d-node"/>
+<text x="105" y="488" text-anchor="middle" class="d-t">query</text>
+<text x="105" y="508" text-anchor="middle" class="d-s">embed question, top-k</text>
+<rect x="215" y="460" width="170" height="70" rx="8" class="d-node"/>
+<text x="300" y="488" text-anchor="middle" class="d-t">validate</text>
+<text x="300" y="508" text-anchor="middle" class="d-s">alignment, NaN, norms</text>
+<rect x="410" y="460" width="200" height="70" rx="8" class="d-node"/>
+<text x="510" y="488" text-anchor="middle" class="d-t">export</text>
+<text x="510" y="508" text-anchor="middle" class="d-s">faiss.index · Chroma</text>
+<path d="M190,380 L120,458" class="d-a" marker-end="url(#ah2)"/>
+<path d="M257,380 L295,458" class="d-a" marker-end="url(#ah2)"/>
+<path d="M340,380 L480,458" class="d-a" marker-end="url(#ah2)"/>
+</svg>
+<figcaption>Figure 2. Components. Solid arrows carry data; dashed arrows are lookups: a reused vector going straight to the commit queue, and the commit log telling the reader which versions are already done.</figcaption>
+</figure>
+
+<div class="tablewrap"><table>
+<thead><tr><th>Component</th><th>Code</th><th>Responsibility</th></tr></thead>
+<tbody>
+<tr><td>Source</td><td><code>Source</code>, <code>doc_meta</code></td><td>Finds the dataset layout, streams records, pairs each with its text by <code>provenance.raw_text_path</code> (or <code>&lt;document_id&gt;.txt</code>), extracts identity metadata, reports unreadable lines instead of failing.</td></tr>
+<tr><td>Chunker</td><td><code>find_sections</code>, <code>split_text</code>, <code>make_chunks</code>, <code>summary_text</code></td><td>Locates the record's clause headings in the text, merges heading-only sections, splits into overlapping windows, adds the overview chunk. Pure functions; no I/O.</td></tr>
+<tr><td>Embed input</td><td><code>context_header</code>, <code>embed_input</code></td><td>Builds the exact string sent to the model and its SHA-256 key.</td></tr>
+<tr><td>Dedup router</td><td>inside <code>cmd_embed</code></td><td>Decides, per chunk, whether a vector already exists (in memory, on disk, or in flight) or must be computed.</td></tr>
+<tr><td>Batcher</td><td><code>embed_robust</code>, <code>_call</code></td><td>Sends batches, retries transient errors, splits rejected batches to isolate a bad input, validates every vector.</td></tr>
+<tr><td>Backends</td><td><code>OllamaEmbedder</code>, <code>STEmbedder</code>, <code>OpenAICompatEmbedder</code>, <code>HashEmbedder</code></td><td>One method each: <code>embed(list of strings) → list of vectors</code>, plus a startup <code>check()</code>.</td></tr>
+<tr><td>Commit queue</td><td><code>Job</code>, <code>commit_ready</code></td><td>Holds documents until all their vectors exist, then commits them in dataset order.</td></tr>
+<tr><td>Store</td><td><code>Store</code>, <code>NpyStore</code></td><td>Append-only files, commit protocol, crash repair at startup, settings guard.</td></tr>
+<tr><td>Readers</td><td><code>search</code>, <code>validate_store</code>, <code>export</code></td><td>Memory-mapped access to the finished store.</td></tr>
+</tbody></table></div>
+
+<!-- ───────────────────────────────────────────── 5 -->
+<h2 id="run"><span class="n">5</span>What happens during a run</h2>
+<ol class="steps">
+<li><b>Settings.</b> The command line is turned into a configuration (backend, model, prefixes, chunk sizes, flags). Its hash is compared with <code>manifest.json</code> in <code>--out</code>; a mismatch stops the run before anything is written.</li>
+<li><b>Safety checks.</b> <code>--out</code> must not be inside the dataset folder or its text folder, nor contain them.</li>
+<li><b>Store opening and repair.</b> <code>docs.jsonl</code> is read up to its last complete line. That gives the number of committed rows, the set of committed document ids with their fingerprints, and the map from embedding key to row. <code>chunks.jsonl</code> and <code>embeddings.npy</code> are truncated to exactly that many rows (see <a href="#storage">section 8</a>).</li>
+<li><b>Backend check.</b> For Ollama: the server answers and the model is pulled. Otherwise a clear message and exit code 1.</li>
+<li><b>Streaming.</b> For each record: skip it if unreadable, filtered by <code>--series</code>/<code>--specs</code>, a repeated <code>document_id</code>, or already committed with the same fingerprint. A committed id whose fingerprint differs is counted as <code>changed_since_embedded</code> and left untouched.</li>
+<li><b>Chunk and route.</b> The record is chunked, each chunk gets its embedding input and key, and the router either reuses an existing vector or queues the input in the current batch. A full batch is sent at once.</li>
+<li><b>Commit.</b> After every batch and every document, the queue commits all leading documents that have every vector. A document that lost an input to a rejection is written to <code>failed.jsonl</code> instead; it is not in <code>docs.jsonl</code>, so the next run retries it.</li>
+<li><b>Finish.</b> The last partial batch is sent, remaining documents are committed, and <code>embed_report.json</code> is written. If requested, FAISS and Chroma exports run.</li>
+</ol>
+<p>Progress is printed to the console every 30 seconds (documents read, embedded, chunks, model inputs per second).</p>
+
+<!-- ───────────────────────────────────────────── 6 -->
+<h2 id="chunking"><span class="n">6</span>Chunking</h2>
+<p>Retrieval quality depends more on chunking than on almost anything else. A chunk should be about one idea, carry
+enough context to be understood alone, and be traceable to its clause. The chunker works on the full extracted text
+(not on the 700-character clause excerpts in the record) and uses the record's clause tree as a guide.</p>
+
+<figure>
+<svg viewBox="0 0 1000 360" role="img" aria-labelledby="f3t">
+<title id="f3t">How a specification's text becomes chunks</title>
+<text x="40" y="22" class="d-lbl">FULL TEXT OF ONE VERSION</text>
+<text x="560" y="22" class="d-lbl">RESULTING CHUNKS</text>
+
+<rect x="40" y="34" width="340" height="26" rx="3" class="d-txt"/>
+<text x="50" y="52" class="d-s">Foreword (short)</text>
+<rect x="40" y="64" width="340" height="56" rx="3" class="d-txt"/>
+<rect x="40" y="64" width="4" height="56" class="d-h"/>
+<text x="52" y="82" class="d-t">1  Scope</text>
+<rect x="40" y="124" width="340" height="18" rx="3" class="d-txt"/>
+<rect x="40" y="124" width="4" height="18" class="d-h"/>
+<text x="52" y="138" class="d-t">5  Procedures</text><text x="170" y="138" class="d-s">heading only</text>
+<rect x="40" y="146" width="340" height="120" rx="3" class="d-txt"/>
+<rect x="40" y="146" width="4" height="120" class="d-h"/>
+<text x="52" y="164" class="d-t">5.3.7  RRC connection re-establishment</text>
+<text x="52" y="184" class="d-s">long section, longer than --max-chars</text>
+<rect x="40" y="270" width="340" height="50" rx="3" class="d-txt"/>
+<rect x="40" y="270" width="4" height="50" class="d-h"/>
+<text x="52" y="288" class="d-t">5.5  Paging</text>
+<text x="52" y="306" class="d-s">"5.5  128 ms" table row is not a heading</text>
+
+<line x1="380" y1="34" x2="560" y2="34" class="d-guide"/>
+<line x1="380" y1="120" x2="560" y2="120" class="d-guide"/>
+<line x1="380" y1="124" x2="600" y2="124" class="d-guide"/>
+<line x1="380" y1="186" x2="560" y2="186" class="d-guide"/>
+<line x1="380" y1="196" x2="600" y2="196" class="d-guide"/>
+<line x1="380" y1="266" x2="600" y2="266" class="d-guide"/>
+<line x1="380" y1="270" x2="560" y2="270" class="d-guide"/>
+<line x1="380" y1="320" x2="560" y2="320" class="d-guide"/>
+
+<rect x="560" y="34" width="26" height="86" rx="3" class="d-chunk"/>
+<text x="600" y="66" class="d-t">chunk 0 · clause 1</text>
+<text x="600" y="84" class="d-s">short foreword glued onto clause 1</text>
+
+<rect x="600" y="124" width="26" height="72" rx="3" class="d-chunk"/>
+<text x="640" y="152" class="d-t">chunk 1 · clause 5.3.7</text>
+<text x="640" y="170" class="d-s">clauses_covered = [5, 5.3.7]</text>
+
+<rect x="560" y="186" width="26" height="80" rx="3" class="d-chunk"/>
+<text x="600" y="226" class="d-t">chunk 2 · clause 5.3.7</text>
+<text x="600" y="244" class="d-s">starts ~150 chars before chunk 1 ends</text>
+
+<rect x="560" y="270" width="26" height="50" rx="3" class="d-chunk"/>
+<text x="600" y="292" class="d-t">chunk 3 · clause 5.5</text>
+
+<rect x="560" y="332" width="430" height="24" rx="3" class="d-sum"/>
+<text x="572" y="349" class="d-s">+ 1 summary chunk per version (LLM-written fields, flagged)</text>
+</svg>
+<figcaption>Figure 3. Headings are located from the record's clause tree; heading-only and very short sections are merged forward; long sections are split with overlap. Every text chunk records its clause and exact character range.</figcaption>
+</figure>
+
+<h3>Rules</h3>
+<ol class="steps">
+<li><b>Find headings.</b> A line is a clause heading only if it starts with a clause number from the record's own <code>clauses</code> list, followed by whitespace and a title, and (when the tree has a title) the line's title starts with the same first 8 letters and digits. Each number is used once, at its first qualifying line. This rejects table rows, list items and cross-references that happen to start with a number. CRLF line endings are normalised to LF first.</li>
+<li><b>Sections.</b> Text before the first heading is a preamble; each heading starts a section that runs to the next heading.</li>
+<li><b>Merge forward.</b> A section with fewer than <code>--min-chars</code> (200) characters is glued to the next one. The merged unit is attributed to the later clause and lists all of them in <code>clauses_covered</code>.</li>
+<li><b>Split.</b> Each unit is cut into pieces of at most <code>--max-chars</code> (1500), breaking at the last paragraph break, else line break, else sentence end (<code>. </code> or <code>; </code>), else comma, else space within the window. A tail shorter than <code>--min-chars</code> is absorbed into the previous piece if the result stays within 1.25 × <code>--max-chars</code>. Consecutive pieces overlap by about <code>--overlap</code> (150) characters, aligned to a word start.</li>
+<li><b>Drop strays.</b> Pieces under 40 non-space characters (a lone heading at the end) are dropped and counted.</li>
+<li><b>Summary chunk.</b> Unless <code>--no-summary</code>, one more chunk is built from <code>technical_summary</code> (scope, purpose, summary) and <code>classification</code> (domain, subdomain, topics, protocols, interfaces, network components, key features), if that text is at least 80 characters. These fields were generated by the LLM during extraction, so the chunk is marked <code>"llm_generated": true</code> and <code>kind: "summary"</code>.</li>
+<li><b>No clause tree.</b> If the record has no clause list, or none of its headings are found, the whole text is one unit and is split into plain windows with an empty <code>clause</code>.</li>
+<li><b>No text.</b> A record without a text file gets only its summary chunk (and is counted as <code>docs_without_text</code>).</li>
+</ol>
+
+<h3>What is actually embedded</h3>
+<p>The model does not see the bare chunk. It sees:</p>
+<pre><code>&lt;document prefix of the model&gt;TS 38.331 Radio Resource Control (RRC); Protocol specification
+Clause 5.3.7 RRC connection re-establishment
+
+&lt;chunk text&gt;</code></pre>
+<p>The context line lets short clauses ("The UE shall start timer T311.") be found by what they are about. It
+deliberately leaves out the version, so identical clause text in different releases produces an identical input
+(see <a href="#dedup">De-duplication</a>). <code>--no-context-header</code> removes the line. The stored
+<code>text</code> field in <code>chunks.jsonl</code> is always the bare chunk.</p>
+
+<div class="note"><p>Defaults (1500 / 150 / 200 characters) give chunks of roughly 300–400 tokens, comfortably inside the
+2048-token context Ollama gives most embedding models by default. If you raise <code>--max-chars</code> a lot, raise
+<code>--num-ctx</code> too, otherwise Ollama silently truncates the input.</p></div>
+
+<!-- ───────────────────────────────────────────── 7 -->
+<h2 id="dedup"><span class="n">7</span>De-duplication</h2>
+<p>Consecutive releases of a specification share most of their text. Re-embedding it would multiply the model time by
+the number of releases kept. The key of a chunk is the SHA-256 of its exact embedding input; before sending an input
+to the model the router checks, in order:</p>
+<div class="tablewrap"><table>
+<thead><tr><th>#</th><th>Where the vector may already be</th><th>When it happens</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Resolved in memory, its document not committed yet</td><td>The same text appears again shortly after, e.g. in the next version, before the previous one finished.</td></tr>
+<tr><td>2</td><td>A committed row of <code>embeddings.npy</code> (read back from disk)</td><td>Text embedded earlier in this run or in any previous run.</td></tr>
+<tr><td>3</td><td>Already queued in the current batch</td><td>Two documents in the same batch share a chunk; the chunk waits for the one request.</td></tr>
+<tr><td>4</td><td>Nowhere</td><td>Added to the batch and sent to the model.</td></tr>
+</tbody></table></div>
+<p>Reused vectors are still written as their own row with their own metadata, so every version keeps a complete
+set of rows and a search can be filtered by release. Only model time is saved, not storage. The dry run reports
+<code>unique_embedding_inputs</code> and <code>saved_by_dedup</code>; the real run reports <code>reused_vectors</code>.</p>
+
+<!-- ───────────────────────────────────────────── 8 -->
+<h2 id="storage"><span class="n">8</span>Storage format and crash safety</h2>
+
+<h3>Files in <code>--out</code></h3>
+<div class="tablewrap"><table>
+<thead><tr><th>File</th><th>Format</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td><code>embeddings.npy</code></td><td>NumPy .npy v1.0, <code>&lt;f4</code>, shape (rows, dim)</td><td>One vector per chunk, L2-normalised unless <code>--no-normalize</code>. Fixed 256-byte header, rewritten after each commit, so the file is a valid .npy at every moment and can grow in place.</td></tr>
+<tr><td><code>chunks.jsonl</code></td><td>JSON lines, UTF-8</td><td>Line N is the metadata and text of row N.</td></tr>
+<tr><td><code>docs.jsonl</code></td><td>JSON lines</td><td>The commit log: one line per committed spec version.</td></tr>
+<tr><td><code>manifest.json</code></td><td>JSON</td><td>Settings, their hash, vector size, row count, timestamps.</td></tr>
+<tr><td><code>failed.jsonl</code></td><td>JSON lines</td><td>Versions that could not be embedded in the last run, with the error. Rewritten every run.</td></tr>
+<tr><td><code>embed_report.json</code></td><td>JSON</td><td>Counters of the last run (see <a href="#operations">section 11</a>).</td></tr>
+<tr><td><code>dryrun_report.json</code></td><td>JSON</td><td>Only after <code>--dry-run</code>.</td></tr>
+<tr><td><code>validation_report.json</code></td><td>JSON</td><td>Only after <code>validate</code>.</td></tr>
+<tr><td><code>faiss.index</code></td><td>FAISS</td><td>Only with <code>--faiss</code>. The FAISS id is the row number.</td></tr>
+</tbody></table></div>
+
+<h3><code>chunks.jsonl</code> fields</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Field</th><th>Example</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>row</code></td><td>10452</td><td>Row in <code>embeddings.npy</code>; equals the line number − 1.</td></tr>
+<tr><td><code>chunk_id</code></td><td><code>38_series_…docx::0007</code></td><td><code>document_id</code> + chunk index. Unique; used as the Chroma id.</td></tr>
+<tr><td><code>doc_id</code>, <code>pdf_url</code></td><td></td><td>Identity of the spec version, as in the dataset.</td></tr>
+<tr><td><code>spec</code>, <code>series</code></td><td><code>38.331</code>, <code>38</code></td><td>Specification number and series (<code>Unknown</code> if the builder could not recover it).</td></tr>
+<tr><td><code>version</code>, <code>version_num</code></td><td><code>15.3.0</code>, 15003000</td><td>Version, and a sortable integer for range filters (−1 if unknown).</td></tr>
+<tr><td><code>release</code></td><td><code>15</code></td><td>Release normalised to the number (<code>Rel-15</code> → <code>15</code>); <code>Unknown</code> where the builder did not invent one (legacy GSM series).</td></tr>
+<tr><td><code>document_type</code>, <code>title</code>, <code>domain</code></td><td><code>TS</code></td><td>From the record.</td></tr>
+<tr><td><code>kind</code></td><td><code>text</code> / <code>summary</code></td><td>Specification text, or the LLM-written overview.</td></tr>
+<tr><td><code>clause</code>, <code>clause_title</code></td><td><code>5.3.7</code></td><td>Clause the chunk belongs to; empty if not attributed.</td></tr>
+<tr><td><code>clauses_covered</code></td><td><code>["5", "5.3.7"]</code></td><td>All clauses whose text is in the chunk (after merging).</td></tr>
+<tr><td><code>char_start</code>, <code>char_end</code></td><td>18210, 19698</td><td>Exact range in the text file (after CRLF→LF); −1 for summary chunks.</td></tr>
+<tr><td><code>chunk_index</code>, <code>n_chunks</code></td><td>7, 41</td><td>Position within the version.</td></tr>
+<tr><td><code>text</code></td><td></td><td>The chunk text (without prefix or context line).</td></tr>
+<tr><td><code>llm_generated</code></td><td>false</td><td>True for summary chunks.</td></tr>
+<tr><td><code>embed_key</code>, <code>source</code></td><td></td><td>SHA-256 key of the embedding input; zip or jsonl file it came from.</td></tr>
+</tbody></table></div>
+
+<h3><code>docs.jsonl</code> and <code>manifest.json</code></h3>
+<pre><code>// docs.jsonl, one line per committed version
+{"doc_id": "...", "fingerprint": "&lt;sha-256 of record line + text&gt;", "row_start": 10445, "row_end": 10486,
+ "n_chunks": 41, "spec": "38.331", "version": "15.3.0", "source": "etsi_dataset.zip",
+ "keys": ["&lt;embed_key of each row&gt;", ...], "committed_at": "2026-10-24T12:26:03+00:00"}
+
+// manifest.json
+{"tool_version": "1.0", "config": {"backend": "ollama", "model": "nomic-embed-text", "doc_prefix": "search_document: ",
+ "query_prefix": "search_query: ", "normalize": true, "max_chars": 1500, "overlap": 150, "min_chars": 200,
+ "context_header": true, "summary": true, "chunker_version": "1", ...},
+ "config_hash": "...", "dim": 768, "rows": 412330, "created_at": "...", "updated_at": "..."}</code></pre>
+
+<h3>Commit protocol</h3>
+<p>Each spec version is committed as one unit. The order of writes makes a single line in <code>docs.jsonl</code> the
+commit marker; anything written after the last marker is, by definition, uncommitted and is cut off at the next start.</p>
+
+<figure>
+<svg viewBox="0 0 1000 290" role="img" aria-labelledby="f4t">
+<title id="f4t">Commit protocol and crash recovery</title>
+<defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="d-head"/></marker></defs>
+<text x="20" y="22" class="d-lbl">COMMITTING ONE SPEC VERSION</text>
+
+<rect x="20" y="36" width="215" height="86" rx="8" class="d-node"/>
+<text x="127" y="64" text-anchor="middle" class="d-t">1  Append vectors</text>
+<text x="127" y="86" text-anchor="middle" class="d-m">embeddings.npy</text>
+<text x="127" y="104" text-anchor="middle" class="d-s">n rows × dim float32</text>
+
+<rect x="265" y="36" width="215" height="86" rx="8" class="d-node"/>
+<text x="372" y="64" text-anchor="middle" class="d-t">2  Append metadata</text>
+<text x="372" y="86" text-anchor="middle" class="d-m">chunks.jsonl</text>
+<text x="372" y="104" text-anchor="middle" class="d-s">n lines, flushed</text>
+
+<rect x="510" y="36" width="215" height="86" rx="8" class="d-hl"/>
+<text x="617" y="64" text-anchor="middle" class="d-hlt">3  Append 1 line = COMMIT</text>
+<text x="617" y="86" text-anchor="middle" class="d-m">docs.jsonl</text>
+<text x="617" y="104" text-anchor="middle" class="d-s">rows, fingerprint, keys</text>
+
+<rect x="755" y="36" width="225" height="86" rx="8" class="d-node"/>
+<text x="867" y="64" text-anchor="middle" class="d-t">4  Rewrite header</text>
+<text x="867" y="86" text-anchor="middle" class="d-m">embeddings.npy</text>
+<text x="867" y="104" text-anchor="middle" class="d-s">shape = (rows, dim)</text>
+
+<path d="M235,79 H263" class="d-a" marker-end="url(#ah4)"/>
+<path d="M480,79 H508" class="d-a" marker-end="url(#ah4)"/>
+<path d="M725,79 H753" class="d-a" marker-end="url(#ah4)"/>
+
+<text x="250" y="148" text-anchor="middle" class="d-lbl">crash here: discarded</text>
+<text x="495" y="148" text-anchor="middle" class="d-lbl">crash here: discarded</text>
+<text x="740" y="148" text-anchor="middle" class="d-lbl">crash here: kept, header fixed</text>
+
+<rect x="20" y="166" width="960" height="108" rx="8" class="d-store"/>
+<text x="40" y="192" class="d-t">On the next start (automatic)</text>
+<text x="40" y="216" class="d-s">a. Read docs.jsonl up to its last complete, valid line → N committed rows; cut off a half-written last line.</text>
+<text x="40" y="236" class="d-s">b. Truncate chunks.jsonl to its first N lines, and embeddings.npy to 256 + N × dim × 4 bytes; rewrite the header.</text>
+<text x="40" y="256" class="d-s">c. Versions after the last commit are not in the commit log, so they are simply embedded again.</text>
+</svg>
+<figcaption>Figure 4. A crash, power cut or Ctrl+C at any point leaves at most one unfinished version, which is cleaned up and redone on the next run.</figcaption>
+</figure>
+
+<p>If the files are inconsistent in a way that cannot come from an interrupted write (for example
+<code>chunks.jsonl</code> shorter than the commit log), the tool stops with "store damaged" rather than guessing. Use a
+new <code>--out</code> or <code>--overwrite</code>.</p>
+
+<h3>The settings guard</h3>
+<p>The settings that change what a vector means are hashed: backend, model, document and query prefixes,
+normalisation, <code>max_chars</code>, <code>overlap</code>, <code>min_chars</code>, the context line, the summary chunk and the
+chunker version. Running against an existing store with any of them different is refused and the differences are
+listed. Vectors from two models live in different spaces; mixing them would make every search silently wrong.
+Settings that do not change vectors (URL, timeout, batch size, filters) can differ between runs.</p>
+
+<!-- ───────────────────────────────────────────── 9 -->
+<h2 id="backends"><span class="n">9</span>Embedding backends and models</h2>
+<div class="tablewrap"><table>
+<thead><tr><th><code>--backend</code></th><th>How it is called</th><th>Use when</th></tr></thead>
+<tbody>
+<tr><td><code>ollama</code> (default)</td><td><code>POST /api/embed</code> with a list of inputs and <code>truncate: true</code>; falls back to the older one-at-a-time <code>/api/embeddings</code> on servers that lack it.</td><td>You already run Ollama for the extractor. Nothing to install in Python.</td></tr>
+<tr><td><code>sentence-transformers</code></td><td>In-process <code>SentenceTransformer.encode</code>. <code>--model</code> may be a local folder.</td><td>Fully offline machines; direct GPU use with <code>--device cuda</code>.</td></tr>
+<tr><td><code>openai</code></td><td><code>POST &lt;--api-url&gt;/embeddings</code>, key from <code>$EMBED_API_KEY</code>.</td><td>A shared embedding server: vLLM, Text Embeddings Inference, LM Studio, llama.cpp server, LocalAI.</td></tr>
+<tr><td><code>hash</code></td><td>Local word-hashing vectors.</td><td>Tests only. Not semantic.</td></tr>
+</tbody></table></div>
+
+<h3>Choosing a model</h3>
+<p><code>nomic-embed-text</code> is the default because it is small and quick to pull. Other models that work
+through Ollama include <code>bge-m3</code>, <code>qwen3-embedding</code> and <code>mxbai-embed-large</code>. Compare them on your own data
+rather than on general benchmarks: embed one or two series into separate stores, run the same 20 or so questions
+that your users actually ask, and compare the top results. Changing the model later means re-embedding everything,
+so this comparison is worth doing before the full run.</p>
+
+<h3>Prefixes</h3>
+<p>Many retrieval models were trained with a fixed prefix on documents and a different one on queries, and work
+noticeably worse without them. The tool picks them from the model name, stores them in the manifest, and the
+<code>query</code> command uses the stored query prefix automatically.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Model name contains</th><th>Document prefix</th><th>Query prefix</th></tr></thead>
+<tbody>
+<tr><td><code>nomic-embed</code></td><td><code>search_document: </code></td><td><code>search_query: </code></td></tr>
+<tr><td><code>e5</code> (e.g. multilingual-e5)</td><td><code>passage: </code></td><td><code>query: </code></td></tr>
+<tr><td><code>bge-m3</code></td><td>none</td><td>none</td></tr>
+<tr><td><code>bge-</code>, <code>mxbai-embed</code>, <code>snowflake-arctic-embed</code></td><td>none</td><td><code>Represent this sentence for searching relevant passages: </code></td></tr>
+<tr><td><code>qwen3-embedding</code></td><td>none</td><td>An instruction to retrieve 3GPP passages that answer the question</td></tr>
+<tr><td><code>embeddinggemma</code></td><td><code>title: none | text: </code></td><td><code>task: search result | query: </code></td></tr>
+<tr><td>anything else</td><td>none</td><td>none</td></tr>
+</tbody></table></div>
+<p>Override with <code>--doc-prefix</code> and <code>--query-prefix</code> (an empty string is allowed).</p>
+
+<!-- ───────────────────────────────────────────── 10 -->
+<h2 id="errors"><span class="n">10</span>Errors, retries and failures</h2>
+<p>A long run must survive a flaky server and a single bad input without losing work, and must stop rather than
+mark the whole dataset as failed when the backend is broken.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Situation</th><th>Classified as</th><th>What happens</th></tr></thead>
+<tbody>
+<tr><td>Connection refused, timeout, HTTP 408 / 429 / 502 / 503 / 504</td><td>Transient</td><td>Retried up to 3 times after 2, 6 and 18 s. If it still fails, the run stops with exit code 3. Committed work is kept.</td></tr>
+<tr><td>Any other HTTP error, wrong number of vectors, backend exception</td><td>Rejected batch</td><td>The batch is split in halves recursively until the bad input is alone.</td></tr>
+<tr><td>A single input still rejected, or its vector is empty / NaN / infinite</td><td>Failed input</td><td>Every document waiting on that input is marked failed, written to <code>failed.jsonl</code>, and retried on the next run. The rest of the run continues.</td></tr>
+<tr><td>25 inputs rejected in a row</td><td>Broken backend</td><td>The run stops with exit code 3 instead of failing every remaining document.</td></tr>
+<tr><td>The model returns a different vector size than the store holds</td><td>Fatal</td><td>The run stops immediately (exit 3). This means the model behind the name changed.</td></tr>
+<tr><td>Unreadable JSON line in the dataset</td><td>Data</td><td>Skipped and counted as <code>unreadable_lines</code>.</td></tr>
+<tr><td>Ctrl+C</td><td>Interrupt</td><td>Already committed versions are kept; exit code 130.</td></tr>
+</tbody></table></div>
+
+<!-- ───────────────────────────────────────────── 11 -->
+<h2 id="operations"><span class="n">11</span>Day-to-day operation</h2>
+
+<h3>Before the full run</h3>
+<ol class="steps">
+<li>Run <code>--dry-run</code>. Read <code>dryrun_report.json</code>: <code>chunks</code>, <code>unique_embedding_inputs</code> (what the model will actually process), <code>characters_to_embed</code>, <code>vector_store_mb_at_768_dims</code>, and <code>chunking.clauses_located</code> against <code>chunking.clauses_known</code> (how well headings were found).</li>
+<li>Run a trial with <code>--limit 20</code> and read the inputs-per-second figure. Divide <code>unique_embedding_inputs</code> by it for an estimate of the full run.</li>
+<li>Spot-check a few lines of <code>chunks.jsonl</code> from the trial: are clauses attributed, do chunks read sensibly?</li>
+</ol>
+
+<h3>Adding data</h3>
+<p>Extract more series, rebuild, then run the same <code>embed</code> command again with the same <code>--out</code>. Versions
+already in the store are skipped by <code>document_id</code> and fingerprint; new ones are appended, reusing vectors for
+any text already embedded.</p>
+
+<h3>Re-extracted or changed versions</h3>
+<p>If a version's record or text changed since it was embedded (for example the extractor was improved and re-run),
+the old vectors are left as they are and the version is counted as <code>changed_since_embedded</code>, with examples in
+<code>embed_report.json</code>. The store does not delete rows in place. To refresh, embed into a new <code>--out</code> or
+use <code>--overwrite</code>; either way every vector is recomputed, because reuse only works within one store.</p>
+
+<h3>Changing the model or chunk settings</h3>
+<p>Always use a new <code>--out</code>. The old store keeps working until you switch.</p>
+
+<h3>Subsets</h3>
+<p><code>--series 36,38</code> and <code>--specs 38.331,55.241</code> embed only those. Several subset runs into the same store
+are fine as long as the settings are the same.</p>
+
+<h3>Run report (<code>embed_report.json</code>)</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Counter</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>docs_embedded</code>, <code>chunks_written</code></td><td>Committed in this run.</td></tr>
+<tr><td><code>embed_inputs</code>, <code>embed_calls</code></td><td>Inputs sent to the model and the number of requests.</td></tr>
+<tr><td><code>reused_vectors</code></td><td>Chunks that needed no model call.</td></tr>
+<tr><td><code>already_embedded</code>, <code>changed_since_embedded</code></td><td>Skipped because done, or skipped because changed.</td></tr>
+<tr><td><code>docs_failed</code>, <code>inputs_failed</code>, <code>batch_splits</code></td><td>See <code>failed.jsonl</code>.</td></tr>
+<tr><td><code>filtered</code>, <code>docs_without_text</code>, <code>docs_without_id</code>, <code>unreadable_lines</code>, <code>duplicate_doc_id_in_dataset</code></td><td>Data conditions.</td></tr>
+<tr><td><code>docs_unfinished</code></td><td>Versions in flight when the run stopped (redone next time).</td></tr>
+<tr><td><code>chunking.*</code></td><td>Clause headings known / located, versions with clause attribution, stray pieces dropped.</td></tr>
+<tr><td><code>store_rows</code>, <code>store_documents</code>, <code>dim</code>, <code>seconds</code>, <code>status</code></td><td>State after the run.</td></tr>
+</tbody></table></div>
+
+<h3>Sizing</h3>
+<p>One float32 vector of 768 dimensions is 3 KB. Each gigabyte of extracted text gives roughly 750 000 chunks at the
+default size, so about 2.3 GB of vectors plus a similar size of <code>chunks.jsonl</code>. The dry run gives the exact
+figure for your dataset.</p>
+
+<!-- ───────────────────────────────────────────── 12 -->
+<h2 id="using"><span class="n">12</span>Using the vectors</h2>
+
+<h3>Built-in search</h3>
+<pre><code>python embed_cparas.py query --out D:\3gpp\vectors "T311 expiry during re-establishment" -k 5
+python embed_cparas.py query --out D:\3gpp\vectors "A5/3 key derivation" --series 55 --release 19
+python embed_cparas.py query --out D:\3gpp\vectors "paging occasion" --spec 38.304 --kind text --json</code></pre>
+<p>The question is embedded with the same backend, model and query prefix recorded in the manifest. Scores are cosine
+similarity. Filters: <code>--spec</code>, <code>--series</code>, <code>--release</code> (accepts <code>15</code> or <code>Rel-15</code>),
+<code>--kind</code>, each comma-separated.</p>
+
+<h3>From Python</h3>
+<pre><code>import json, numpy as np
+from pathlib import Path
+import embed_cparas as ec
+
+out = Path(r"D:\3gpp\vectors")
+hits = ec.search(out, "UE behaviour on radio link failure", k=5, filters={"spec": ["38.331"], "release": ["16"]})
+for h in hits:
+    print(h["score"], h["spec"], h["version"], h["clause"], h["text"][:120])
+
+# or directly
+X = np.load(out / "embeddings.npy", mmap_mode="r")                 # (rows, dim), normalised
+meta = [json.loads(l) for l in open(out / "chunks.jsonl", encoding="utf-8")]
+# q = embedding of the question, made with the SAME model and the manifest's query_prefix, normalised
+scores = X @ q
+top = np.argsort(-scores)[:5]</code></pre>
+<p>When embedding a question yourself, use exactly the model and <code>query_prefix</code> from <code>manifest.json</code>.
+With Ollama: <code>POST /api/embed {"model": "nomic-embed-text", "input": ["search_query: your question"]}</code>.</p>
+
+<h3>FAISS and Chroma</h3>
+<pre><code>python embed_cparas.py export --out D:\3gpp\vectors --faiss hnsw            # pip install faiss-cpu
+python embed_cparas.py export --out D:\3gpp\vectors --chroma D:\3gpp\chroma # pip install chromadb</code></pre>
+<p><code>--faiss flat</code> is exact search; <code>hnsw</code> (32 neighbours) is approximate and faster for millions of rows.
+Both use inner product, which equals cosine because vectors are normalised. The FAISS id is the row number in
+<code>chunks.jsonl</code>.</p>
+<p>The Chroma export upserts every chunk into collection <code>cparas_3gpp</code> (cosine space) with
+<code>chunk_id</code> as the id, the text as the document and all metadata fields (lists joined with commas). Running it
+again updates in place without duplicates. Example: <code>col.query(query_embeddings=[q], n_results=5, where={"spec": "38.331"})</code>.</p>
+
+<!-- ───────────────────────────────────────────── 13 -->
+<h2 id="validate"><span class="n">13</span>Validation</h2>
+<pre><code>python embed_cparas.py validate --out D:\3gpp\vectors --dataset D:\3gpp\build_v2</code></pre>
+<p>Prints <code>VALID</code> or <code>INVALID</code> (exit code 0 or 2) and writes <code>validation_report.json</code>. Checks:</p>
+<ul>
+<li>the .npy header is this tool's and the file size matches rows × dim exactly;</li>
+<li><code>docs.jsonl</code> rows are contiguous, each line's key count matches its rows, no document appears twice;</li>
+<li>every <code>chunks.jsonl</code> line has <code>row</code> equal to its position, chunk ids are unique, no chunk text is empty;</li>
+<li>row counts agree across <code>embeddings.npy</code>, <code>chunks.jsonl</code> and <code>docs.jsonl</code>;</li>
+<li>no vector contains NaN or infinity, and all norms are 1 ± 0.001 when normalisation is on;</li>
+<li>with <code>--dataset</code>: how many dataset versions are not in the store (a warning: filtered, failed or not yet run).</li>
+</ul>
+
+<!-- ───────────────────────────────────────────── 14 -->
+<h2 id="cli"><span class="n">14</span>Command reference</h2>
+
+<h3><code>embed</code></h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Option</th><th>Default</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>--dataset, -d</code></td><td>required</td><td>Builder output folder, extractor output folder, a .zip, or a .jsonl.</td></tr>
+<tr><td><code>--text-dir</code></td><td><code>text/</code> next to the jsonl</td><td>Text folder for a .jsonl dataset.</td></tr>
+<tr><td><code>--out, -o</code></td><td>required</td><td>Vector store folder; must not overlap the dataset.</td></tr>
+<tr><td><code>--backend</code></td><td><code>ollama</code></td><td><code>ollama</code>, <code>sentence-transformers</code>, <code>openai</code>, <code>hash</code>.</td></tr>
+<tr><td><code>--model, -m</code></td><td><code>nomic-embed-text</code></td><td>Also <code>$EMBED_MODEL</code>.</td></tr>
+<tr><td><code>--doc-prefix</code>, <code>--query-prefix</code></td><td>by model name</td><td>Override the prefixes.</td></tr>
+<tr><td><code>--batch-size</code></td><td>32</td><td>Inputs per request. 64–128 on a GPU.</td></tr>
+<tr><td><code>--max-chars</code>, <code>--overlap</code>, <code>--min-chars</code></td><td>1500, 150, 200</td><td>Chunking. Overlap must be under half of max.</td></tr>
+<tr><td><code>--no-summary</code></td><td>off</td><td>No overview chunk.</td></tr>
+<tr><td><code>--no-context-header</code></td><td>off</td><td>Embed the bare chunk text.</td></tr>
+<tr><td><code>--no-normalize</code></td><td>off</td><td>Keep raw vectors (then dot product is not cosine).</td></tr>
+<tr><td><code>--series</code>, <code>--specs</code></td><td>all</td><td>Comma-separated subsets.</td></tr>
+<tr><td><code>--limit N</code></td><td>none</td><td>Embed at most N new versions.</td></tr>
+<tr><td><code>--dry-run</code></td><td>off</td><td>Chunk and count only.</td></tr>
+<tr><td><code>--overwrite</code></td><td>off</td><td>Delete this tool's files in <code>--out</code> and start again.</td></tr>
+<tr><td><code>--faiss flat|hnsw</code>, <code>--chroma DIR</code>, <code>--chroma-collection</code></td><td>off, off, <code>cparas_3gpp</code></td><td>Exports after the run.</td></tr>
+<tr><td><code>--ollama-url</code></td><td><code>http://127.0.0.1:11434</code></td><td>Also <code>$OLLAMA_BASE_URL</code>.</td></tr>
+<tr><td><code>--api-url</code></td><td><code>$EMBED_API_URL</code></td><td>OpenAI-compatible base URL ending in <code>/v1</code>.</td></tr>
+<tr><td><code>--num-ctx</code>, <code>--keep-alive</code>, <code>--timeout</code></td><td>model default, 30m, 300</td><td>Ollama context size, model keep-alive, seconds per request.</td></tr>
+<tr><td><code>--device</code></td><td>auto</td><td>sentence-transformers: <code>cuda</code> or <code>cpu</code>.</td></tr>
+<tr><td><code>--quiet</code></td><td>off</td><td>No console output.</td></tr>
+</tbody></table></div>
+
+<h3><code>query</code>, <code>validate</code>, <code>export</code></h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Command</th><th>Options</th></tr></thead>
+<tbody>
+<tr><td><code>query "TEXT"</code></td><td><code>--out</code>, <code>-k</code> (5), <code>--spec</code>, <code>--series</code>, <code>--release</code>, <code>--kind</code>, <code>--snippet</code> (300 chars), <code>--json</code>, backend URL options.</td></tr>
+<tr><td><code>validate</code></td><td><code>--out</code>, <code>--dataset</code>, <code>--text-dir</code>.</td></tr>
+<tr><td><code>export</code></td><td><code>--out</code>, <code>--faiss flat|hnsw</code>, <code>--chroma DIR</code>, <code>--chroma-collection</code>.</td></tr>
+</tbody></table></div>
+
+<h3>Exit codes</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>Success.</td></tr>
+<tr><td>1</td><td>Bad arguments or refused (settings mismatch, overlapping folders, model not pulled, server unreachable at start).</td></tr>
+<tr><td>2</td><td><code>validate</code> found problems.</td></tr>
+<tr><td>3</td><td>Run stopped: backend unavailable or rejecting everything. Committed work kept; run again.</td></tr>
+<tr><td>4</td><td>Run finished but some versions failed; see <code>failed.jsonl</code>; run again to retry them.</td></tr>
+<tr><td>130</td><td>Interrupted with Ctrl+C.</td></tr>
+</tbody></table></div>
+
+<!-- ───────────────────────────────────────────── 15 -->
+<h2 id="testing"><span class="n">15</span>Testing</h2>
+<pre><code>cd cparas_embeddings
+python -m unittest discover -s tests -v</code></pre>
+<p>32 tests, needing only numpy. They run against synthetic records in the builder's exact format and a fake Ollama
+HTTP server, so no model or GPU is needed. Covered:</p>
+<ul>
+<li>chunking: exact character offsets, heading detection rejecting a table row that starts with a clause number, merge-forward, overlap, termination on pathological text, CRLF text, records without a clause tree or without text;</li>
+<li>input layouts: single zip, split part zips, jsonl + text, extractor folder;</li>
+<li>resume, appending new versions, crash repair of half-written tails in all three files;</li>
+<li>de-duplication across versions, across runs, and at batch sizes 2, 3, 4, 5 and 7;</li>
+<li>a rejected input failing only its own version, which succeeds on the next run; the 25-in-a-row stop;</li>
+<li>refusing changed settings, refusing an output inside the dataset, the dataset left byte-for-byte unchanged;</li>
+<li>search with filters; the .npy header growing and loading with <code>np.load</code>;</li>
+<li>Ollama batching, prefixes on documents and queries, the legacy endpoint, model not pulled, server down.</li>
+</ul>
+<p>The suite was also checked by deliberately breaking key logic (heading title check, crash repair, in-memory reuse,
+normalisation, merge-forward, row-count validation, the 25-in-a-row stop) and confirming a test fails each time.
+Separately, the tool was run on output produced by the real <code>build_cparas_dataset.py</code>, including a legacy
+<code>02.06dcs</code> specification, and the FAISS and Chroma exports were exercised.</p>
+
+<!-- ───────────────────────────────────────────── 16 -->
+<h2 id="limits"><span class="n">16</span>Limitations and known gaps</h2>
+<ul>
+<li><b>Speed with a real model is not yet measured.</b> All tests used the fake server or the hash backend. Measure with a <code>--limit 20</code> trial on your hardware.</li>
+<li><b>Changed versions are not refreshed in place.</b> They are reported; refreshing means a new store.</li>
+<li><b>Clause attribution depends on the extracted text.</b> If the extractor wrote a heading differently from the clause tree (for example a reworded title), that clause's text is attributed to the previous clause. <code>chunking.clauses_located</code> versus <code>clauses_known</code> in the reports shows how often this happens.</li>
+<li><b>Tables are chunked as text.</b> Large ASN.1 blocks and tables are split like prose; they are searchable but not structured.</li>
+<li><b>Filtered search scans <code>chunks.jsonl</code>.</b> Fine up to a few million rows; for heavy interactive use, load the store into Chroma or another database with metadata indexes.</li>
+<li><b>Summary chunks reflect LLM output</b> from extraction, so they can be wrong in ways the specification text is not. Filter with <code>--kind text</code> when exact wording matters.</li>
+<li><b>Single process.</b> One run uses one backend connection. Run separate <code>--series</code> subsets into separate stores if you need parallel machines.</li>
+</ul>
+
+<!-- ───────────────────────────────────────────── 17 -->
+<h2 id="trouble"><span class="n">17</span>Troubleshooting</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Message or symptom</th><th>Cause and fix</th></tr></thead>
+<tbody>
+<tr><td>Ollama not reachable at …</td><td>Start Ollama (<code>ollama serve</code>, or the tray app) or pass the right <code>--ollama-url</code>.</td></tr>
+<tr><td>model '…' is not pulled</td><td><code>ollama pull &lt;model&gt;</code>.</td></tr>
+<tr><td>holds embeddings made with different settings</td><td>Same <code>--out</code> with another model or chunking. Use a new <code>--out</code>, or <code>--overwrite</code> to discard the old store.</td></tr>
+<tr><td>--out must be a separate folder</td><td>The output was inside the dataset folder (or contained it). Choose a sibling folder.</td></tr>
+<tr><td>No etsi_dataset.zip / … in</td><td>Point <code>--dataset</code> at the builder's <code>--out</code>, the extractor's <code>--output</code>, or the file itself.</td></tr>
+<tr><td>store damaged</td><td>Files were edited or partly deleted by hand. Start a new store.</td></tr>
+<tr><td>Exit code 4, entries in failed.jsonl</td><td>Read the error column. Usually an input the server rejected; run again to retry, or raise <code>--num-ctx</code> if it is a length problem.</td></tr>
+<tr><td>Exit code 3: rejected 25 inputs in a row</td><td>The backend is failing everything: wrong model type (a chat model instead of an embedding model), out of memory, or server error. Check the server log.</td></tr>
+<tr><td>Searches return summary chunks first</td><td>Use <code>--kind text</code>, or embed with <code>--no-summary</code>.</td></tr>
+<tr><td>Poor results with a custom model</td><td>Check its document and query prefixes and set them with <code>--doc-prefix</code> / <code>--query-prefix</code> (new store).</td></tr>
+</tbody></table></div>
+
+</div>
+</body>
+</html>
